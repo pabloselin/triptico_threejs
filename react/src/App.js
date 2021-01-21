@@ -12,7 +12,9 @@ import Effects from "./Effects";
 //import Box from "./Box.js";
 
 //static shit
-import data from "./data/2020-12-21_11_30_39.csv";
+import csvdata from "./data/2020-12-21_11_30_39.csv";
+
+//const perfData = readString(data);
 
 const CanvasWrap = styled.div`
   width: 100%;
@@ -25,7 +27,29 @@ const colors = new Array(1000)
   .fill()
   .map(() => niceColors[7][Math.floor(Math.random() * 5)]);
 
+// https://stackoverflow.com/questions/50054676/what-is-the-correct-way-to-get-a-number-modulo-range-such-that-the-returned-valu
+function wrapNum(x, range, includeMax) {
+  var max = range[1],
+    min = range[0],
+    d = max - min;
+  return x === max && includeMax ? x : ((((x - min) % d) + d) % d) + min;
+}
+
 function Boxes() {
+  //set data state
+  const [data, setData] = useState([]);
+  const [rows, setRows] = useState(0);
+  if (data.length === 0) {
+    fetch(csvdata)
+      .then((r) => r.text())
+      .then((text) => {
+        let tmpData = readString(text);
+        setData(tmpData);
+        setRows(tmpData.data.length);
+      });
+  }
+
+  //set interactions state
   const [hovered, set] = useState();
   const colorArray = useMemo(
     () =>
@@ -43,26 +67,43 @@ function Boxes() {
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    ref.current.rotation.x = Math.sin(time / 4);
-    ref.current.rotation.y = Math.sin(time / 2);
+    //((x - min) % d + d) % d
+    //console.log(data.data.length);
+    if (data.data && data.data.length > 0) {
+      let currentKey = wrapNum(parseInt(time), [0, data.data.length], true);
+
+      console.log(data.data[currentKey][0]);
+
+      // ref.current.rotation.x = Math.sin(time / 4);
+      // ref.current.rotation.y = Math.sin(time / 2);
+      ref.current.rotation.x = parseFloat(data.data[currentKey][0]);
+      ref.current.rotation.y = parseFloat(data.data[currentKey][1]);
+      ref.current.rotation.z = parseFloat(data.data[currentKey][2]);
+    }
+
     let i = 0;
+
     for (let x = 0; x < 10; x++)
       for (let y = 0; y < 10; y++)
         for (let z = 0; z < 10; z++) {
+          console.log(x);
           const id = i++;
+          //let y = 0;
+          //let z = 0;
           tempObject.position.set(5 - x, 5 - y, 5 - z);
           tempObject.rotation.y =
             Math.sin(x / 4 + time) +
             Math.sin(y / 4 + time) +
             Math.sin(z / 4 + time);
           tempObject.rotation.z = tempObject.rotation.y * 2;
-          if (hovered !== previous.current) {
-            tempColor
-              .set(id === hovered ? "white" : colors[id])
-              .toArray(colorArray, id * 3);
-            ref.current.geometry.attributes.color.needsUpdate = true;
-          }
-          const scale = id === hovered ? 2 : 1;
+          // if (hovered !== previous.current) {
+          //   tempColor
+          //     .set(id === hovered ? "white" : colors[id])
+          //     .toArray(colorArray, id * 3);
+          //   ref.current.geometry.attributes.color.needsUpdate = true;
+          // }
+          //const scale = id === hovered ? 2 : 1;
+          const scale = 1;
           tempObject.scale.set(scale, scale, scale);
           tempObject.updateMatrix();
           ref.current.setMatrixAt(id, tempObject.matrix);
@@ -89,7 +130,6 @@ function Boxes() {
 }
 
 function App() {
-  console.log(data);
   return (
     <CanvasWrap>
       <Canvas
