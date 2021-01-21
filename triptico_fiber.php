@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Plugin Name:       Triptico React Fiber
  * Plugin URI:        https://apie.cl
@@ -11,12 +11,12 @@
  * License:           MIT
  * Text Domain:       tri
  * Domain Path:       /languages
- */
+ **/
 
 define('TRI_VERSION', '0.1');
 
 function triptico_scripts() {
-	wp_enqueue_script( 'tripticojs', plugin_dir_url( __FILE__ ) . '/build/index.js', ['wp-element', 'wp-api-fetch'], TRI_VERSION, true );
+	wp_enqueue_script( 'tripticojs', plugin_dir_url( __FILE__ ) . '/build/index.js', TRI_VERSION, true );
 }
 
-add_action('wp_enqueue_scripts', 'tripticojs');
+add_action('wp_enqueue_scripts', 'triptico_scripts');
