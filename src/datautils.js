@@ -1,5 +1,34 @@
 import CSVToArray from "./csvtoarray.js";
 
+const getJoinedCSV = (files, filesURLS, sensors) => {
+	let data = {};
+	sensors.map((sensor) => {
+		console.log(sensor);
+		let tmpdata = [];
+		for (let i = 0; i < files[sensor].length; i++) {
+			//console.log(acc2_d[i]);
+			if (
+				sensor === "acc_i" ||
+				sensor === "acc_d" ||
+				sensor === "acc2_i" ||
+				sensor === "acc2_d"
+			) {
+				let sensorURL = sensor.startsWith("acc2_") ? "csv_2" : "csv";
+				data[sensor] = fetch(filesURLS[sensorURL] + files[sensor][i])
+					.then((response) => response.text())
+					.then((dataTXT) => tmpdata.push(CSVToArray(dataTXT)))
+					.then((key) => {
+						//console.log(acc2_d_tmpdata)
+						data[sensor] = joinData(tmpdata, files[sensor].length);
+						return data;
+					});
+			}
+		}
+	});
+
+	return data;
+};
+
 const startAnimationWithCSV = (csv) => {
 	fetch(csv)
 		.then((response) => response.text())
@@ -23,13 +52,13 @@ const startAnimationWithMultipleCSV = (files, imgs) => {
 	return finalData;
 };
 
-const joinData = (dataArray, totalLength, imgs) => {
+const joinData = (dataArray, totalLength) => {
 	let joinData = [];
 	if (dataArray.length === totalLength) {
 		for (let i = 0; i < dataArray.length; i++) {
 			joinData = joinData.concat(dataArray[i]);
 		}
-		return processData(joinData, imgs);
+		return processData(joinData);
 	}
 };
 
@@ -83,6 +112,7 @@ const processData = (data, imgs) => {
 };
 
 export {
+	getJoinedCSV,
 	startAnimationWithCSV,
 	startAnimationWithMultipleCSV,
 	joinData,

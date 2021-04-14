@@ -21,6 +21,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/inc/triptico_custom_fields.php' );
 
 function triptico_scripts() {
 	wp_enqueue_script( 'tripticojs', plugin_dir_url( __FILE__ ) . '/dist/main.js', TRI_VERSION, true );
+	wp_enqueue_style( 'tripticocss', plugin_dir_url( __FILE__ ) . '/tristyle.css', array(), TRI_VERSION, 'screen' );
 }
 
 add_action('wp_enqueue_scripts', 'triptico_scripts');
@@ -60,18 +61,33 @@ function filesList($path) {
 	return $files;
 }
 
-function searchFilesInRange($datestart, $dateend) {
-	$files = array(
-		'acc_i' 	=> searchFilesInRangeFolder($datestart, $dateend, TRI_CSVFOLDER, '.csv', '_i'),
-		'acc_d' 	=> searchFilesInRangeFolder($datestart, $dateend, TRI_CSVFOLDER, '.csv', '_d'),
-		'acc2_i' 	=> searchFilesInRangeFolder($datestart, $dateend, TRI_CSV2FOLDER, '.csv', '_i'),
-		'acc2_d' 	=> searchFilesInRangeFolder($datestart, $dateend, TRI_CSV2FOLDER, '.csv', '_d'),
-		'img' 		=> searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.jpg', ''),
-		'video' 	=> searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.mp4', ''),
-		'audio' 	=> searchFilesInRangeFolder($datestart, $dateend, TRI_AUDIOFOLDER, '.wav', ''),
-	);
+function searchFilesInRange($datestart, $dateend, $postid) {
+	
+	$sensores = get_post_meta($postid, '_tri_sensores', true);
+	
+	if($sensores) {
+		foreach($sensores as $sensor) {
+			if($sensor == 'acc_i') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_CSVFOLDER, '.csv', '_i');
+			} elseif($sensor == 'acc_d') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_CSVFOLDER, '.csv', '_d');
+			} elseif($sensor == 'img') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.jpg', '');
+			} elseif($sensor == 'audio') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_AUDIOFOLDER, '.wav', '');
+			} elseif($sensor == 'acc2_i') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_CSV2FOLDER, '.csv', '_i');
+			} elseif($sensor == 'acc2_d') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_CSV2FOLDER, '.csv', '_d');
+			} elseif($sensor == 'video') {
+				$files[$sensor] = searchFilesInRangeFolder($datestart, $dateend, TRI_VIDEOFOLDER, '.mp4', '');
+			}
+		}
 
-	return $files;
+		return $files;
+	} else {
+		return 'No se asignaron sensores';
+	}
 }
 
 function searchFilesInRangeFolder($datestart, $dateend, $folder, $extension, $suffix = '') {
@@ -126,9 +142,8 @@ function triptico_datavars() {
 	if(get_post_type( $post->ID ) == 'performance') {
 		wp_register_script( 'tripticodata', '', [], '', true);
 		wp_enqueue_script( 'tripticodata' );
-		wp_add_inline_script('tripticodata', 'const TRIPTICO = ' . json_encode( searchFilesInRange( $datestart, $dateend)) . '; const TRIPTICO_URLS = ' .json_encode( triptico_dataurls()));
+		wp_add_inline_script('tripticodata', 'const TRIPTICO = ' . json_encode( searchFilesInRange( $datestart, $dateend, $post->ID)) . '; const TRIPTICO_URLS = ' .json_encode( triptico_dataurls()) . '; const TRIPTICO_SENSORS = ' . json_encode( get_post_meta($post->ID, '_tri_sensores', true)));
 	}
-	
 }
 
 add_action('wp_enqueue_scripts', 'triptico_datavars');

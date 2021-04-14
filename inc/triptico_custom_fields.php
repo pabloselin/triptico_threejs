@@ -71,10 +71,10 @@ function triptico_cmb2_add_metabox_perfdata() {
 		'type' => 'multicheck',
 		'options' => array(
 			'video' 	=> __( 'Video', 'tri' ),
-			'imagen' 	=> __( 'Imagen', 'tri' ),
+			'img' 	=> __( 'Imagen', 'tri' ),
 			'audio' 	=> __( 'Audio', 'tri' ),
-			'acc1_i' 	=> __( 'Acelerómetro 1 Izquierda', 'tri' ),
-			'acc1_d' 	=> __( 'Acelerómetro 1 Derecha', 'tri' ),
+			'acc_i' 	=> __( 'Acelerómetro 1 Izquierda', 'tri' ),
+			'acc_d' 	=> __( 'Acelerómetro 1 Derecha', 'tri' ),
 			'acc2_i' 	=> __( 'Acelerómetro 2 Izquierda', 'tri' ),
 			'acc2_d' 	=> __( 'Acelerómetro 2 Derecha', 'tri' ),
 		),
