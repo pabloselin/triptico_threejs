@@ -1,6 +1,6 @@
 import CSVToArray from "./csvtoarray.js";
 
-const getJoinedCSV = (files, filesURLS, sensors) => {
+const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 	let data = {};
 	sensors.map((sensor) => {
 		console.log(sensor);
@@ -20,13 +20,13 @@ const getJoinedCSV = (files, filesURLS, sensors) => {
 					.then((key) => {
 						//console.log(acc2_d_tmpdata)
 						data[sensor] = joinData(tmpdata, files[sensor].length);
-						return data;
+						runMain(data);
 					});
 			}
 		}
 	});
 
-	return data;
+	//return data;
 };
 
 const startAnimationWithCSV = (csv) => {

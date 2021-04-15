@@ -6,7 +6,9 @@ function main(data) {
 	const sceneElements = [];
 	const clock = new THREE.Clock();
 	const MAX_POINTS = 3000;
-
+	let drawCount;
+	let drawCount_right;
+	console.log(data);
 	function makeScene(elem) {
 		const scene = new THREE.Scene();
 		const fov = 45;
@@ -14,9 +16,17 @@ function main(data) {
 		const far = 5;
 		const aspect = 2; // the canvas default
 
-		const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-		camera.position.set(0, 1, 2);
-		camera.lookAt(0, 0, 0);
+		// const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+		// camera.position.set(0, 1, 2);
+
+		const camera = new THREE.PerspectiveCamera(
+			45,
+			window.innerWidth / window.innerHeight,
+			1,
+			10000
+		);
+		camera.position.set(0, 0, 1000);
+		//camera.lookAt(0, 0, 0);
 		scene.add(camera);
 		//const axesHelper = new THREE.AxesHelper(5);
 		//scene.add(axesHelper);
@@ -44,22 +54,25 @@ function main(data) {
 			"position",
 			new THREE.BufferAttribute(positions, 3)
 		);
-
-		const drawCount = 2;
+		drawCount = 2;
 		geometry.setDrawRange(0, drawCount);
 		const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
 
-		const line = new THREE.Line(geometry, material);
-		sceneInfo.scene.add(line);
-		sceneInfo.line = line;
+		const line_acc2_d = new THREE.Line(geometry, material);
+		const line_acc2_i = new THREE.Line(geometry, material);
+		sceneInfo.scene.add(line_acc2_d);
+		sceneInfo.scene.add(line_acc2_i);
+		sceneInfo.line_1 = line_acc2_d;
+		sceneInfo.line_2 = line_acc2_i;
+
+		updatePositions(sceneInfo.line_1, data["acc2_d"]);
+		updatePositions(sceneInfo.line_2, data["acc2_i"]);
 
 		// const geometry = new THREE.BoxGeometry(1, 1, 1);
 		// const material = new THREE.MeshPhongMaterial({ color: "red" });
 		// const mesh = new THREE.Mesh(geometry, material);
 		// sceneInfo.scene.add(mesh);
 		// sceneInfo.mesh = mesh;
-
-		console.log(sceneInfo);
 		return sceneInfo;
 	}
 
@@ -67,31 +80,57 @@ function main(data) {
 		const sceneInfo = makeScene(
 			document.querySelector("#triptico_canvas_right")
 		);
-		const geometry = new THREE.BoxGeometry(1, 1, 1);
-		const material = new THREE.MeshPhongMaterial({ color: "green" });
-		const mesh = new THREE.Mesh(geometry, material);
-		sceneInfo.scene.add(mesh);
-		sceneInfo.mesh = mesh;
+		const geometry = new THREE.BufferGeometry();
+		const positions = new Float32Array(MAX_POINTS * 3);
+		geometry.setAttribute(
+			"position",
+			new THREE.BufferAttribute(positions, 3)
+		);
+		drawCount_right = 2;
+		geometry.setDrawRange(0, drawCount_right);
+		const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+
+		const line_acc2_d = new THREE.Line(geometry, material);
+		const line_acc2_i = new THREE.Line(geometry, material);
+		sceneInfo.scene.add(line_acc2_d);
+		sceneInfo.scene.add(line_acc2_i);
+		sceneInfo.line_1 = line_acc2_d;
+		sceneInfo.line_2 = line_acc2_i;
+
+		updatePositions(sceneInfo.line_1, data["acc2_d"]);
+		updatePositions(sceneInfo.line_2, data["acc2_d"]);
+
+		// const geometry = new THREE.BoxGeometry(1, 1, 1);
+		// const material = new THREE.MeshPhongMaterial({ color: "red" });
+		// const mesh = new THREE.Mesh(geometry, material);
+		// sceneInfo.scene.add(mesh);
+		// sceneInfo.mesh = mesh;
 		return sceneInfo;
 	}
 
 	function setupRugScene() {}
 
-	function updatePositions(line, sensor) {
+	function updatePositions(line, data) {
 		const positions = line.geometry.attributes.position.array;
 		let x, y, z, index;
+		x = y = z = index = 0;
+		//console.log(data);
+		if (data !== undefined) {
+			for (let i = 0, l = MAX_POINTS; i < l; i++) {
+				if (data[i] !== undefined) {
+					positions[index++] = x;
+					positions[index++] = y;
+					positions[index++] = z;
 
-		for (let i = 0, l = MAX_POINTS; i < l; i++) {
-			positions[index++] = x;
-			positions[index++] = y;
-			positions[index++] = z;
-
-			x += data[sensor][i]["a"][0];
-			y += data[sensor][i]["a"][1];
-			z += data[sensor][i]["a"][2];
+					// x += (Math.random() - 0.5) * 30;
+					// y += (Math.random() - 0.5) * 30;
+					// z += (Math.random() - 0.5) * 30;
+					x += data[i]["a"][0];
+					y += data[i]["a"][1];
+					z += data[i]["a"][2];
+				}
+			}
 		}
-
-		console.log(positions);
 	}
 
 	function resizeRendererToDisplaySize(renderer) {
@@ -140,13 +179,12 @@ function main(data) {
 		renderer.render(scene, camera);
 	}
 
-	function render(time) {
-		time *= 0.001;
+	function animate() {
 		//get data status
 		//console.log(data.csv2_d !== undefined);
-
-		let delta = clock.getDelta();
-		let second = parseInt(clock.elapsedTime);
+		requestAnimationFrame(animate);
+		drawCount = (drawCount + 1) % MAX_POINTS;
+		drawCount_right = (drawCount + 1) % MAX_POINTS;
 
 		resizeRendererToDisplaySize(renderer);
 
@@ -157,24 +195,31 @@ function main(data) {
 		renderSceneInfo(sceneLeft);
 		renderSceneInfo(sceneRight);
 
-		console.log("update line", sceneLeft.line);
-
-		drawCount = (drawCount + 1) % MAX_POINTS;
-		sceneLeft.line.geometry.setDrawRange(0, drawCount);
+		sceneLeft.line_1.geometry.setDrawRange(0, drawCount);
+		sceneRight.line_1.geometry.setDrawRange(0, drawCount_right);
 
 		if (drawCount === 0) {
-			updatePositions(sceneLeft.line, "csv2_d");
-			sceneLeft.line.geometry.attributes.position.needsUpdate = true;
-			sceneLeft.line.material.color.setHSL(Math.random(), 1, 0.5);
+			console.log("updating line");
+			updatePositions(sceneLeft.line_1, data["acc2_d"]);
+			sceneLeft.line_1.geometry.attributes.position.needsUpdate = true;
+			sceneLeft.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 		}
 
+		if (drawCount_right === 0) {
+			console.log("updating line");
+			updatePositions(sceneRight.line_1, data["acc2_i"]);
+			sceneRight.line_1.geometry.attributes.position.needsUpdate = true;
+			sceneRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
+		}
+
+		//console.log(drawCount);
+
 		window.addEventListener("resize", renderer);
-		requestAnimationFrame(render);
 	}
 
 	renderer.setClearColor(0x000000, 1);
 
-	requestAnimationFrame(render);
+	requestAnimationFrame(animate);
 }
 
 export { main };
