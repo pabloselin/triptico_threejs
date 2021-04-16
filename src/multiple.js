@@ -29,6 +29,11 @@ function main(data) {
 			camProps.position[1],
 			camProps.position[2]
 		);
+		camera.rotation.set(
+			camProps.rotation[0],
+			camProps.rotation[1],
+			camProps.rotation[2]
+		);
 		//camera.lookAt(0, 0, 0);
 		scene.add(camera);
 		//const axesHelper = new THREE.AxesHelper(5);
@@ -55,6 +60,7 @@ function main(data) {
 			near: 1,
 			far: 10000,
 			position: [0, 0, 1000],
+			rotation: [0, 0, 0],
 		};
 		const sceneInfo = makeScene(canvasEl, camProps);
 
@@ -93,6 +99,7 @@ function main(data) {
 			near: 1,
 			far: 10000,
 			position: [0, 0, 1000],
+			rotation: [0, 0, 0],
 		};
 		const sceneInfo = makeScene(
 			document.querySelector("#triptico_canvas_right"),
@@ -133,6 +140,7 @@ function main(data) {
 			near: 0.1,
 			far: 60,
 			position: [3, 3, 0],
+			rotation: [0, 1, 0],
 		};
 		const sceneInfo = makeScene(
 			document.querySelector("#triptico_canvas_right"),
@@ -149,11 +157,12 @@ function main(data) {
 	function setup3dScene() {
 		const canvasEl = document.querySelector("#triptico_canvas_3d");
 		const camProps = {
-			fov: 45,
-			aspect: window.innerWidth / window.innerHeight,
-			near: 1,
-			far: 1000,
-			position: [0, 0, 1000],
+			fov: 155,
+			aspect: 2,
+			near: 0.1,
+			far: 100,
+			position: [3, 0, 3],
+			rotation: [0, 0, 0],
 		};
 		const sceneInfo = makeScene(canvasEl, camProps);
 
@@ -162,7 +171,7 @@ function main(data) {
 		sceneInfo.scene.add(axesHelper);
 
 		const cubeMaterialRed = new THREE.MeshPhongMaterial({
-			color: colors.line_1,
+			color: colors.line_3,
 			side: THREE.DoubleSide,
 		});
 		// const cubeMaterialGreen = new THREE.MeshPhongMaterial({
@@ -175,7 +184,7 @@ function main(data) {
 		// 	color: colors.line_4,
 		// });
 		// //const geometry = new THREE.BufferGeometry();
-		const geometry = new THREE.PlaneGeometry(10, 10, 1);
+		const geometry = new THREE.PlaneGeometry(10, 3, 1);
 		const plane = new THREE.Mesh(geometry, cubeMaterialRed);
 		sceneInfo.scene.add(plane);
 		sceneInfo.plane = plane;
@@ -297,9 +306,22 @@ function main(data) {
 		}
 
 		//3d Scene
+		let curposition = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].a[0] * 5
+			: 0;
+
 		scene3D.meshes.push(
-			addMesh(scene3D.plane, 0, 1, drawCount + 10, scene3D.scene)
+			addMesh(
+				scene3D.plane,
+				curposition,
+				drawCount * 0.5,
+				0.4,
+				scene3D.scene
+			)
 		);
+		scene3D.camera.position.x =
+			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.1;
+
 		//console.log(drawCount);
 		//console.log(scene3D);
 
