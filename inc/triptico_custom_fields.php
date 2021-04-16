@@ -54,16 +54,27 @@ function triptico_cmb2_add_metabox_perfdata() {
 	) );
 
 	$cmb->add_field( array(
-		'name' => __( 'Fin performance', 'tri' ),
-		'id' => $prefix . 'end_perfo',
-		'type' => 'text_datetime_timestamp',
-		'attributes'	=> array(
-							'data-datepicker' => json_encode( array(
-									'dateFormat' => 'dd-mm-yy'
-									)
-								)
-							)
-	) );
+		'name'	=> __('Duracion performance (en minutos)', 'tri'),
+		'id'	=> $prefix . 'length_perfo',
+		'type'	=> 'select',
+		'options'	=> array(
+							2 => 2,
+							5 => 5,
+							10 => 10,
+						)
+	));
+
+	// $cmb->add_field( array(
+	// 	'name' => __( 'Fin performance', 'tri' ),
+	// 	'id' => $prefix . 'end_perfo',
+	// 	'type' => 'text_datetime_timestamp',
+	// 	'attributes'	=> array(
+	// 						'data-datepicker' => json_encode( array(
+	// 								'dateFormat' => 'dd-mm-yy'
+	// 								)
+	// 							)
+	// 						)
+	// ) );
 
 	$cmb->add_field( array(
 		'name' => __( 'Sensores', 'tri' ),

@@ -5,6 +5,15 @@ body {
 	background-color: #282923;
 }
 
+body.performance-template-default h1.entry-title {
+	color: white;
+	margin: 0;
+}
+
+.entry-content .debug {
+	color: white;
+}
+
 .wrapperperf {
 	display: flex;
 }
@@ -147,19 +156,31 @@ body {
 #triptico_performance_visualization {
 	display: flex;
 	flex-wrap: wrap;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 80vh;
+	margin-top: 20vh;
+	width: 100%;
 }
-
+/*
 .triptico_box {
 	width: 200px;
-	height: 500px;
-}
+	height: 80vh;
+}*/
 
 #triptico_canvas_left {
-	width: 35%;
+	width: 15%;
 }
 
 #triptico_canvas_right {
-	width: 35%;
+	width: 15%;
+}
+
+#triptico_canvas_3d {
+	width: 40%;
+	border-left: 1px solid #f0f0f0;
+	border-right: 1px solid #f0f0f0;
 }
 
 #triptico_canvas_rug {

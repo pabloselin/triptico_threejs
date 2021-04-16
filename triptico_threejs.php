@@ -138,7 +138,13 @@ function searchFilesInRangeFolder($datestart, $dateend, $folder, $extension, $su
 function triptico_datavars() {
 	global $post;
 	$datestart = get_post_meta($post->ID, '_tri_start_perfo', true);
-	$dateend = get_post_meta($post->ID, '_tri_end_perfo', true);
+	$dateobj = new DateTime("@$datestart");
+
+	$perfduration = get_post_meta($post->ID, '_tri_length_perfo', true) ? get_post_meta($post->ID, '_tri_length_perfo', true) : 5;
+	date_add($dateobj, date_interval_create_from_date_string( $perfduration . ' minutes'));
+	$dateend = date_format($dateobj, 'U');
+	//var_dump($datestart, $dateend);
+	//$dateend = get_post_meta($post->ID, '_tri_end_perfo', true);
 	if(get_post_type( $post->ID ) == 'performance') {
 		wp_register_script( 'tripticodata', '', [], '', true);
 		wp_enqueue_script( 'tripticodata' );

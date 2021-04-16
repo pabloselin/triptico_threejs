@@ -1,0 +1,34 @@
+#0099cc. color de una linea o punteos 1
+#ffffe6.            color de una linea o punteos 2
+
+#00b33c. color linea o punteos 3
+#cc0000. color linea o punteos 4
+#802b00. color linea 5
+#cc99ff. color 6
+
+referencia colores para lo de las lineas:
+https://digitalartmuseum.org/verostko/pps_ff.html
+
+
+Paletas para:
+
+Mañanas: 
+#ffffcc
+#d8d8ed
+#b3d9ff
+#66ffb3
+#b3ffff
+
+tardes:
+#b35900
+#806600
+#800000
+#cc7a00
+
+tardes-noches:
+#262673
+#33334d
+#001a00
+#331f00
+
+fondo. QUIZAS ESO QUE cambie o no?
