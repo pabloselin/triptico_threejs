@@ -1,5 +1,4 @@
 import * as THREE from "three";
-//import { OrbitControls } from "../node_modules/"
 import { makeMesh, addMesh } from "./geometries.js";
 import {
 	colors,
@@ -22,9 +21,29 @@ function main(data) {
 	const MAX_POINTS = data.acc2_i.length;
 	let drawCount = 0;
 	let drawCount_right = 0;
+	let mouseX = 0;
+	let mouseY = 0;
+	let directionX = 1;
 	const infoZonesLeft = document.getElementById("infozones_left");
 	const infoZonesRight = document.getElementById("infozones_right");
 	const imageElement = document.getElementById("image_performance");
+	document.onmousemove = handleMouseMove;
+
+	function handleMouseMove(event) {
+		if (event.pageX < mouseX) {
+			directionX = -1;
+		} else if (event.pageX > mouseX) {
+			directionX = 1;
+		}
+		console.log(event);
+		mouseX = event.pageX;
+
+		if (mouseY > event.clientY) {
+			mouseY = event.clientY;
+		} else {
+			mouseY = -event.clientY;
+		}
+	}
 
 	function setupRugScene() {
 		const camProps = {
@@ -69,6 +88,15 @@ function main(data) {
 			position: [-1, 2, -2],
 		};
 		const sceneInfo = makeScene(canvasEl, camProps, lightProps);
+		// sceneInfo.controls = new THREE.OrbitControls(
+		// 	sceneInfo.camera,
+		// 	renderer.domElement
+		// );
+
+		// sceneInfo.controls.enableDamping = true;
+		// sceneInfo.controls.dampingFactor = 0.25;
+		// sceneInfo.controls.enableZoom = true;
+		// sceneInfo.controls.autoRotate = true;
 
 		sceneInfo.materialGreen = new THREE.MeshPhongMaterial({
 			color: colors.line_3,
@@ -167,6 +195,7 @@ function main(data) {
 	function animate() {
 		//get data status
 		//console.log(data.csv2_d !== undefined);
+		//scene3D.controls.update();
 		requestAnimationFrame(animate);
 		drawCount = (drawCount + 1) % MAX_POINTS;
 		drawCount_right = (drawCount + 1) % MAX_POINTS;
@@ -301,6 +330,9 @@ function main(data) {
 
 		scene3D.camera.position.x =
 			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.9;
+
+		// scene3D.camera.rotation.y =
+		// 	scene3D.camera.rotation.y + directionX * 0.01;
 
 		//console.log(drawCount);
 		//console.log(scene3D);
