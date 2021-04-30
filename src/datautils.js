@@ -3,7 +3,6 @@ import CSVToArray from "./csvtoarray.js";
 const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 	let data = {};
 	sensors.map((sensor) => {
-		console.log(sensor);
 		let tmpdata = [];
 		for (let i = 0; i < files[sensor].length; i++) {
 			//console.log(acc2_d[i]);

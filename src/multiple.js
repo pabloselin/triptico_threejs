@@ -1,6 +1,17 @@
 import * as THREE from "three";
+//import { OrbitControls } from "../node_modules/"
 import { makeMesh, addMesh } from "./geometries.js";
-import { colors, colors_morning } from "./colors.js";
+import {
+	colors,
+	colors_morning,
+	colors_sunset,
+	colors_night,
+} from "./colors.js";
+import makeScene from "./makeScene.js";
+import setupLineScene from "./setupLineScene.js";
+import updatePositions from "./updatePositions.js";
+import updateHTMLInfo from "./updateHTMLInfo.js";
+import updateImages from "./updateImages.js";
 
 // Tres escenas
 function main(data) {
@@ -8,130 +19,12 @@ function main(data) {
 	const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 	const sceneElements = [];
 	const clock = new THREE.Clock();
-	const MAX_POINTS = 2400;
-	let drawCount;
-	let drawCount_right;
-	//console.log(data);
-
-	function makeScene(elem, camProps) {
-		const scene = new THREE.Scene();
-		// const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-		// camera.position.set(0, 1, 2);
-
-		const camera = new THREE.PerspectiveCamera(
-			camProps.fov,
-			camProps.aspect,
-			camProps.near,
-			camProps.far
-		);
-		camera.position.set(
-			camProps.position[0],
-			camProps.position[1],
-			camProps.position[2]
-		);
-		camera.rotation.set(
-			camProps.rotation[0],
-			camProps.rotation[1],
-			camProps.rotation[2]
-		);
-		//camera.lookAt(0, 0, 0);
-		scene.add(camera);
-		//const axesHelper = new THREE.AxesHelper(5);
-		//scene.add(axesHelper);
-
-		//Lights
-		{
-			const color = 0xffffff;
-			const intensity = 1;
-			const light = new THREE.DirectionalLight(color, intensity);
-			light.position.set(-1, 2, 4);
-			camera.add(light);
-		}
-
-		return { scene, camera, elem };
-	}
-
-	function setupLeftScene() {
-		const canvasEl = document.querySelector("#triptico_canvas_left");
-		const canvasDimensions = canvasEl.getBoundingClientRect();
-		const camProps = {
-			fov: 45,
-			aspect: canvasDimensions.height / canvasDimensions.width,
-			near: 1,
-			far: 10000,
-			position: [0, 0, 1000],
-			rotation: [0, 0, 0],
-		};
-		const sceneInfo = makeScene(canvasEl, camProps);
-
-		const geometry = new THREE.BufferGeometry();
-		const positions = new Float32Array(MAX_POINTS * 3);
-		geometry.setAttribute(
-			"position",
-			new THREE.BufferAttribute(positions, 3)
-		);
-		drawCount = 2;
-		geometry.setDrawRange(0, drawCount);
-		const material = new THREE.LineBasicMaterial({ color: colors.line_1 });
-
-		const line_acc2_d = new THREE.Line(geometry, material);
-		const line_acc2_i = new THREE.Line(geometry, material);
-		sceneInfo.scene.add(line_acc2_d);
-		sceneInfo.scene.add(line_acc2_i);
-		sceneInfo.line_1 = line_acc2_d;
-		sceneInfo.line_2 = line_acc2_i;
-
-		updatePositions(sceneInfo.line_1, data["acc2_d"]);
-		updatePositions(sceneInfo.line_2, data["acc2_i"]);
-
-		// const geometry = new THREE.BoxGeometry(1, 1, 1);
-		// const material = new THREE.MeshPhongMaterial({ color: "red" });
-		// const mesh = new THREE.Mesh(geometry, material);
-		// sceneInfo.scene.add(mesh);
-		// sceneInfo.mesh = mesh;
-		return sceneInfo;
-	}
-
-	function setupRightScene() {
-		const camProps = {
-			fov: 45,
-			aspect: window.innerWidth / window.innerHeight,
-			near: 1,
-			far: 10000,
-			position: [0, 0, 1000],
-			rotation: [0, 0, 0],
-		};
-		const sceneInfo = makeScene(
-			document.querySelector("#triptico_canvas_right"),
-			camProps
-		);
-		const geometry = new THREE.BufferGeometry();
-		const positions = new Float32Array(MAX_POINTS * 3);
-		geometry.setAttribute(
-			"position",
-			new THREE.BufferAttribute(positions, 3)
-		);
-		drawCount_right = 2;
-		geometry.setDrawRange(0, drawCount_right);
-		const material = new THREE.LineBasicMaterial({ color: colors.line_3 });
-
-		const line_acc2_d = new THREE.Line(geometry, material);
-		const line_acc2_i = new THREE.Line(geometry, material);
-		sceneInfo.scene.add(line_acc2_d);
-		sceneInfo.scene.add(line_acc2_i);
-		sceneInfo.line_1 = line_acc2_d;
-		sceneInfo.line_2 = line_acc2_i;
-
-		updatePositions(sceneInfo.line_1, data["acc2_d"]);
-		updatePositions(sceneInfo.line_2, data["acc2_d"]);
-
-		// const geometry = new THREE.BoxGeometry(1, 1, 1);
-		// const material = new THREE.MeshPhongMaterial({ color: "red" });
-		// const mesh = new THREE.Mesh(geometry, material);
-		// sceneInfo.scene.add(mesh);
-		// sceneInfo.mesh = mesh;
-		return sceneInfo;
-	}
+	const MAX_POINTS = data.acc2_i.length;
+	let drawCount = 0;
+	let drawCount_right = 0;
+	const infoZonesLeft = document.getElementById("infozones_left");
+	const infoZonesRight = document.getElementById("infozones_right");
+	const imageElement = document.getElementById("image_performance");
 
 	function setupRugScene() {
 		const camProps = {
@@ -142,15 +35,21 @@ function main(data) {
 			position: [3, 3, 0],
 			rotation: [0, 1, 0],
 		};
+		const lightProps = {
+			color: 0xffffff,
+			intensity: 1,
+			position: [-1, 2, 4],
+		};
 		const sceneInfo = makeScene(
-			document.querySelector("#triptico_canvas_right"),
-			camProps
+			document.querySelector("#triptico_canvas_rug_right"),
+			camProps,
+			lightProps
 		);
 		const geometry = new THREE.BufferGeometry();
 		const axesHelper = new THREE.AxesHelper(5);
 
+		sceneInfo.scene.background = new THREE.Color(colors_morning.purple);
 		sceneInfo.scene.add(axesHelper);
-
 		return sceneInfo;
 	}
 
@@ -160,61 +59,45 @@ function main(data) {
 			fov: 155,
 			aspect: 2,
 			near: 0.1,
-			far: 100,
-			position: [3, 0, 3],
+			far: 10000,
+			position: [3, 0, 12],
 			rotation: [0, 0, 0],
 		};
-		const sceneInfo = makeScene(canvasEl, camProps);
+		const lightProps = {
+			color: 0xffffff,
+			intensity: 1,
+			position: [-1, 2, -2],
+		};
+		const sceneInfo = makeScene(canvasEl, camProps, lightProps);
 
-		const axesHelper = new THREE.AxesHelper(5);
-
-		sceneInfo.scene.add(axesHelper);
-
-		const cubeMaterialRed = new THREE.MeshPhongMaterial({
+		sceneInfo.materialGreen = new THREE.MeshPhongMaterial({
 			color: colors.line_3,
 			side: THREE.DoubleSide,
 		});
-		// const cubeMaterialGreen = new THREE.MeshPhongMaterial({
-		// 	color: colors.line_2,
-		// });
-		// const cubeMaterialBlue = new THREE.MeshPhongMaterial({
-		// 	color: colors.line_3,
-		// });
-		// const cubeMaterialYellow = new THREE.MeshPhongMaterial({
-		// 	color: colors.line_4,
-		// });
-		// //const geometry = new THREE.BufferGeometry();
-		const geometry = new THREE.PlaneGeometry(10, 3, 1);
-		const plane = new THREE.Mesh(geometry, cubeMaterialRed);
-		sceneInfo.scene.add(plane);
-		sceneInfo.plane = plane;
-		sceneInfo.material = cubeMaterialRed;
+
+		sceneInfo.materialRed = new THREE.MeshPhongMaterial({
+			color: colors.line_4,
+			side: THREE.DoubleSide,
+		});
+
+		sceneInfo.materialBlue = new THREE.MeshPhongMaterial({
+			color: colors.line_1,
+			side: THREE.DoubleSide,
+		});
+
+		sceneInfo.materialYellow = new THREE.MeshPhongMaterial({
+			color: colors.line_2,
+			side: THREE.DoubleSide,
+		});
+
+		sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
+
+		sceneInfo.geometry = new THREE.PlaneGeometry(10, 1.2, 1);
+		//sceneInfo.scene.add(plane);
+		//sceneInfo.plane = plane;
 		sceneInfo.meshes = [];
 
 		return sceneInfo;
-	}
-
-	function updatePositions(line, data) {
-		const positions = line.geometry.attributes.position.array;
-		let x, y, z, index;
-		x = y = z = index = 0;
-		//console.log(data);
-		if (data !== undefined) {
-			for (let i = 0, l = MAX_POINTS; i < l; i++) {
-				if (data[i] !== undefined) {
-					positions[index++] = x;
-					positions[index++] = y;
-					positions[index++] = z;
-
-					// x += (Math.random() - 0.5) * 30;
-					// y += (Math.random() - 0.5) * 30;
-					// z += (Math.random() - 0.5) * 30;
-					x += data[i]["a"][0];
-					y += data[i]["a"][1];
-					z += data[i]["a"][2];
-				}
-			}
-		}
 	}
 
 	function resizeRendererToDisplaySize(renderer) {
@@ -228,12 +111,26 @@ function main(data) {
 		return needResize;
 	}
 
-	const sceneLeft = setupLeftScene();
-	const sceneRight = setupRightScene();
+	const lineleft = document.querySelector("#triptico_canvas_left");
+	const lineright = document.querySelector("#triptico_canvas_right");
+	const sceneLineLeft = setupLineScene(
+		lineleft,
+		data["acc2_i"],
+		MAX_POINTS,
+		drawCount,
+		colors.line_1
+	);
+	const sceneLineRight = setupLineScene(
+		lineright,
+		data["acc2_d"],
+		MAX_POINTS,
+		drawCount,
+		colors.line_3
+	);
 	const scene3D = setup3dScene();
 	const rugScene = setupRugScene();
 
-	//console.log(sceneLeft, scene3D);
+	//console.log(sceneLineLeft, scene3D);
 
 	function renderSceneInfo(sceneInfo) {
 		const { scene, camera, elem } = sceneInfo;
@@ -273,62 +170,149 @@ function main(data) {
 		requestAnimationFrame(animate);
 		drawCount = (drawCount + 1) % MAX_POINTS;
 		drawCount_right = (drawCount + 1) % MAX_POINTS;
-
 		resizeRendererToDisplaySize(renderer);
 
 		renderer.setScissorTest(false);
 		renderer.clear(true, true);
 		renderer.setScissorTest(true);
 
-		renderSceneInfo(sceneLeft);
-		renderSceneInfo(sceneRight);
-		renderSceneInfo(scene3D);
-		//renderSceneInfo(rugScene);
+		// renderSceneInfo(sceneLineLeft);
+		// renderSceneInfo(sceneLineRight);
+		// renderSceneInfo(scene3D);
+		// renderSceneInfo(rugScene);
 
-		sceneLeft.line_1.geometry.setDrawRange(0, drawCount);
-		sceneRight.line_1.geometry.setDrawRange(0, drawCount_right);
+		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
+		sceneLineRight.line_1.geometry.setDrawRange(0, drawCount_right);
 
-		//sceneLeft.camera.position.x += 1;
-		//sceneLeft.camera.position.y += 1;
+		//sceneLineLeft.camera.position.x += 1;
+		//sceneLineLeft.camera.position.y += 1;
 
-		if (drawCount === 0) {
-			console.log("updating line left");
-			updatePositions(sceneLeft.line_1, data["acc2_d"]);
-			sceneLeft.line_1.geometry.attributes.position.needsUpdate = true;
-			//sceneLeft.line_1.material.color.setHSL(Math.random(), 1, 0.5);
-		}
+		updatePositions(sceneLineLeft.line_1, data["acc2_d"], MAX_POINTS);
+		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
+		sceneLineLeft.line_1.geometry.attributes.position.needsUpdate = true;
+		//sceneLineLeft.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
-		if (drawCount_right === 0) {
-			console.log("updating line right");
-			updatePositions(sceneRight.line_1, data["acc2_i"]);
-			sceneRight.line_1.geometry.attributes.position.needsUpdate = true;
-			//sceneRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
-		}
+		updatePositions(sceneLineRight.line_1, data["acc2_i"], MAX_POINTS);
+		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
+		sceneLineRight.line_1.geometry.attributes.position.needsUpdate = true;
+		//sceneLineRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
+
+		updateHTMLInfo(data["acc2_i"], infoZonesLeft, drawCount);
+		updateHTMLInfo(data["acc2_d"], infoZonesRight, drawCount);
+		updateImages(
+			imageElement,
+			TRIPTICO.img,
+			drawCount,
+			TRIPTICO_URLS.img,
+			MAX_POINTS
+		);
 
 		//3d Scene
 		let curposition = data["acc2_d"][drawCount]
-			? data["acc2_d"][drawCount].a[0] * 5
+			? data["acc2_d"][drawCount].a[0] * 1.2
+			: 0;
+
+		let curpositionb = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].g[0] * 1.2
+			: 0;
+
+		let curpositionc = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].g[1] * 1.2
+			: 0;
+
+		let curpositiond = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].a[1] * 1.2
+			: 0;
+
+		let curRotation = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].g[2] * 1.2
+			: 0;
+
+		let curRotationb = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].a[1] * 1.2
+			: 0;
+
+		let curRotationc = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].a[0] * 1.2
+			: 0;
+
+		let curRotationd = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].a[1] * 1.2
 			: 0;
 
 		scene3D.meshes.push(
 			addMesh(
-				scene3D.plane,
+				scene3D.geometry,
+				scene3D.materialGreen,
+				drawCount * 0.9,
 				curposition,
-				drawCount * 0.5,
 				0.4,
+				curRotation,
 				scene3D.scene
 			)
 		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometry,
+				scene3D.materialRed,
+				drawCount * 0.9,
+				curpositionb,
+				curRotationb,
+				0.8,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometry,
+				scene3D.materialBlue,
+				drawCount * 0.9,
+				curpositionc,
+				curRotationc,
+				1.2,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometry,
+				scene3D.materialYellow,
+				drawCount * 0.9,
+				curpositiond,
+				curRotationd,
+				1.6,
+				scene3D.scene
+			)
+		);
+
+		if (scene3D.meshes.length > 300) {
+			//console.log(meshes[0], meshes.length);
+			for (let i = 0; i < 4; i++) {
+				scene3D.meshes[i].geometry.dispose();
+				scene3D.scene.remove(scene3D.meshes[i]);
+				scene3D.meshes.splice(i, 1);
+			}
+		}
+
+		//scene3D.scene.add(curmesh);
+
 		scene3D.camera.position.x =
-			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.1;
+			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.9;
 
 		//console.log(drawCount);
 		//console.log(scene3D);
+		renderSceneInfo(sceneLineLeft);
+		renderSceneInfo(sceneLineRight);
+		renderSceneInfo(scene3D);
+		renderSceneInfo(rugScene);
 
 		window.addEventListener("resize", renderer);
 	}
 
-	renderer.setClearColor(colors_morning.line_1, 1);
+	renderer.setClearColor(colors_morning.yellow, 1);
 
 	requestAnimationFrame(animate);
 }

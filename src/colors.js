@@ -8,25 +8,25 @@ const colors = {
 };
 
 const colors_morning = {
-	line_1: 0xffffcc,
-	line_2: 0xd8d8ed,
-	line_3: 0xb3d9ff,
-	line_4: 0x66ffb3,
-	line_5: 0xb3ffff,
+	yellow: 0xffffcc,
+	purple: 0xd8d8ed,
+	blue: 0xb3d9ff,
+	green: 0x66ffb3,
+	clearblue: 0xb3ffff,
 };
 
 const colors_sunset = {
-	line_1: 0xb35900,
-	line_2: 0x806600,
-	line_3: 0x800000,
-	line_4: 0xcc7a00,
+	darkorange: 0xb35900,
+	brown: 0x806600,
+	redbrown: 0x800000,
+	orange: 0xcc7a00,
 };
 
 const colors_night = {
-	line_1: 0x262673,
-	line_2: 0x33334d,
-	line_3: 0x001a00,
-	line_4: 0x331f00,
+	blue: 0x262673,
+	navy: 0x33334d,
+	darkgreen: 0x001a00,
+	brown: 0x331f00,
 };
 
 export { colors, colors_morning, colors_sunset, colors_night };

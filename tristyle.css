@@ -1,146 +1,28 @@
-html,
-body {
-	margin: 24px;
-	height: 100%;
-	background-color: #282923;
-}
-
-body.performance-template-default h1.entry-title {
-	color: white;
-	margin: 0;
-}
-
-.entry-content .debug {
-	color: white;
-}
-
-.wrapperperf {
-	display: flex;
-}
-
-#left {
-	width: 70%;
-	border: 1px solid white;
-}
-
-#debug {
-	color: white;
-	background-color: #282923;
-	font-size: 14px;
-	font-family: sans-serif;
-	padding: 12px;
-	border-bottom: 1px solid white;
-	position: relative;
-}
-
-#debug span {
-	display: inline-block;
-	padding: 3px;
-	width: 40px;
-	text-align: center;
-}
-
-#debug span.x {
-	background-color: #d03b07;
-}
-
-#debug span.y {
-	background-color: #07d028;
-}
-
-#debug span.z {
-	background-color: #2a07d0;
-}
-
-#debug i {
-	position: absolute;
-	right: 12px;
-	top: 12px;
-	font-size: 24px;
-}
-
-.accel {
-	margin: 0;
-	padding: 6px;
-	max-width: 360px;
-}
-
-#right {
-	width: 30%;
-}
-
-img#perfImg {
-	max-width: 120px;
-	height: auto;
-}
-
-#triptico {
-	height: 50vh;
-	width: 100%;
-	display: block;
-	background-color: white;
-	border-bottom: 1px solid white;
-}
-
-#triptico canvas {
-	max-width: 100%;
-	height: auto;
-}
-
-#info {
-	border-top: 1px solid white;
-	border-right: 1px solid white;
-	border-bottom: 1px solid white;
-	color: white;
-	height: 80vh;
-	overflow: hidden;
-	text-align: left;
-	background-color: #000;
-	line-height: 1px;
-}
-
-#info i {
-	width: 10px;
-	height: 10px;
-	line-height: 1px;
-	background-color: #ccc;
-	display: inline-block;
-	border-color: white;
-	margin: 0;
-	padding: 0;
-	color: white;
-	font-size: 6px;
-	font-family: sans-serif;
-	align-self: flex-start;
-}
-
-#performanceImages {
-	max-height: 260px;
-	display: flex;
-	flex-wrap: wrap;
-	overflow: hidden;
-}
-
-#performanceImages img {
-	width: 10px;
-	height: auto;
-}
-
-#perfLarge {
-	width: 200px;
-	height: auto;
-}
-
-.bottomimgs {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-}
-
 /* Nuevos estilos */
 
 body {
 	background-color: transparent !important;
+}
+
+header.entry-header {
+	display: none;
+}
+
+.infoleft,
+.inforight {
+	color: #d8d8ed;
+	font-size: 13px;
+	padding: 12px;
+	margin-top: 40px;
+}
+
+.inforight {
+	text-align: right;
+}
+
+.infoleft p,
+.inforight p {
+	margin-bottom: 0;
 }
 
 #triptico_canvas {
@@ -153,15 +35,21 @@ body {
 	z-index: -1;
 }
 
+#triptico_performance_wrapper {
+	margin-top: 36px;
+}
+
 #triptico_performance_visualization {
 	display: flex;
 	flex-wrap: wrap;
+	flex-grow: 0;
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 80vh;
-	margin-top: 20vh;
+	height: 100vh;
 	width: 100%;
+	align-items: flex-start;
+	justify-content: flex-start;
 }
 /*
 .triptico_box {
@@ -170,19 +58,62 @@ body {
 }*/
 
 #triptico_canvas_left {
-	width: 15%;
+	width: 20%;
+	height: 100%;
 }
 
 #triptico_canvas_right {
-	width: 15%;
+	width: 20%;
+	height: 100%;
+}
+
+.centerzone {
+	width: 60%;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #triptico_canvas_3d {
-	width: 40%;
-	border-left: 1px solid #f0f0f0;
-	border-right: 1px solid #f0f0f0;
+	width: 100%;
+	height: 60vh;
 }
 
 #triptico_canvas_rug {
-	width: 30%;
+	width: 50%;
+	height: 40vh;
+	background-color: white;
+}
+
+#triptico_canvas_rug_right {
+	width: 50%;
+	height: 40vh;
+	background-color: brown;
+}
+
+#triptico_canvas_rug img {
+	max-height: 100%;
+	width: auto;
+	margin: 0 auto;
+}
+
+.triptico_performance_header {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	padding: 12px;
+	width: 100%;
+	z-index: 10;
+}
+
+.triptico_performance_header h1 {
+	margin: 0;
+	font-weight: normal;
+	display: inline-block;
+}
+
+.triptico_performance_header p {
+	display: inline-block;
+	margin: 0;
 }
