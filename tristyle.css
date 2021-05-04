@@ -87,7 +87,7 @@ header.entry-header {
 #triptico_canvas_rug_right {
 	width: 50%;
 	height: 40vh;
-	background-color: brown;
+	background-color: transparent;
 }
 
 #triptico_canvas_rug img {

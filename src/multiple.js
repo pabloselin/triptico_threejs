@@ -35,7 +35,6 @@ function main(data) {
 		} else if (event.pageX > mouseX) {
 			directionX = 1;
 		}
-		console.log(event);
 		mouseX = event.pageX;
 
 		if (mouseY > event.clientY) {
@@ -47,12 +46,12 @@ function main(data) {
 
 	function setupRugScene() {
 		const camProps = {
-			fov: 155,
+			fov: 100,
 			aspect: window.innerWidth / window.innerHeight,
 			near: 0.1,
 			far: 60,
-			position: [3, 3, 0],
-			rotation: [0, 1, 0],
+			position: [3, 3, 3],
+			rotation: [0, 0, 0],
 		};
 		const lightProps = {
 			color: 0xffffff,
@@ -65,10 +64,80 @@ function main(data) {
 			lightProps
 		);
 		const geometry = new THREE.BufferGeometry();
-		const axesHelper = new THREE.AxesHelper(5);
+		//const axesHelper = new THREE.AxesHelper(5);
+		let planePoints = parseInt(Math.sqrt(MAX_POINTS));
 
 		sceneInfo.scene.background = new THREE.Color(colors_morning.purple);
-		sceneInfo.scene.add(axesHelper);
+
+		const indices = [];
+		const vertices = [];
+		const normals = [];
+		const colors = [];
+
+		const size = 20;
+		const segments = planePoints;
+		const halfSize = size / 2;
+		const segmentSize = size / segments;
+
+		for (let i = 0; i <= segments; i++) {
+			const y = i * segmentSize - halfSize;
+
+			for (let j = 0; j <= segments; j++) {
+				const x = j * segmentSize - halfSize;
+				vertices.push(x, -y, 0);
+				normals.push(0, 0, 1);
+
+				const r = data["acc2_d"][i] ? data["acc2_d"][i].a[0] * 1.2 : 0;
+				//const r = x / size + 0.5;
+				const g = data["acc2_d"][i] ? data["acc2_d"][i].a[1] * 1.2 : 0;
+
+				const b = data["acc2_d"][i] ? data["acc2_d"][i].a[2] * 1.2 : 0;
+				//const g = y / size + 0.5;
+				//const g = 0;
+
+				colors.push(r, g, b);
+			}
+		}
+
+		for (let i = 0; i < segments; i++) {
+			for (let j = 0; j < segments; j++) {
+				const a = i * (segments + 1) + (j + 1);
+				const b = i * (segments + 1) + j;
+				const c = (i + 1) * (segments + 1) + j;
+				const d = (i + 1) * (segments + 1) + (j + 1);
+
+				// generate two faces (triangles) per iteration
+
+				indices.push(a, b, d); // face one
+				indices.push(b, c, d); // face two
+			}
+		}
+
+		geometry.setIndex(indices);
+		geometry.setAttribute(
+			"position",
+			new THREE.Float32BufferAttribute(vertices, 3)
+		);
+		geometry.setAttribute(
+			"normal",
+			new THREE.Float32BufferAttribute(normals, 3)
+		);
+		geometry.setAttribute(
+			"color",
+			new THREE.Float32BufferAttribute(colors, 3)
+		);
+
+		const material = new THREE.MeshPhongMaterial({
+			side: THREE.DoubleSide,
+			vertexColors: true,
+		});
+
+		sceneInfo.plane = new THREE.Mesh(geometry, material);
+		sceneInfo.scene.add(sceneInfo.plane);
+
+		//sceneInfo.scene.add(plane);
+		//sceneInfo.scene.add(axesHelper);
+
 		return sceneInfo;
 	}
 
@@ -197,6 +266,7 @@ function main(data) {
 		//console.log(data.csv2_d !== undefined);
 		//scene3D.controls.update();
 		requestAnimationFrame(animate);
+		const time = Date.now() * 0.001;
 		drawCount = (drawCount + 1) % MAX_POINTS;
 		drawCount_right = (drawCount + 1) % MAX_POINTS;
 		resizeRendererToDisplaySize(renderer);
@@ -213,6 +283,8 @@ function main(data) {
 		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
 		sceneLineRight.line_1.geometry.setDrawRange(0, drawCount_right);
 
+		sceneLineLeft.line_1.rotation.x = time * 0.04;
+		sceneLineRight.line_1.rotation.x = time * 0.04;
 		//sceneLineLeft.camera.position.x += 1;
 		//sceneLineLeft.camera.position.y += 1;
 
@@ -326,12 +398,15 @@ function main(data) {
 			}
 		}
 
+		rugScene.plane.rotation.x = curRotationc * 0.0025;
+		rugScene.plane.rotation.y = curRotationb * 0.0005;
+
 		//scene3D.scene.add(curmesh);
 
 		scene3D.camera.position.x =
 			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.9;
 
-		// scene3D.camera.rotation.y =
+		scene3D.camera.rotation.y = curRotationd * 0.015;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;
 
 		//console.log(drawCount);

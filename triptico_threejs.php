@@ -141,15 +141,17 @@ function searchFilesInRangeFolder($datestart, $dateend, $folder, $extension, $su
 
 function triptico_datavars() {
 	global $post;
-	$datestart = get_post_meta($post->ID, '_tri_start_perfo', true);
-	$dateobj = new DateTime("@$datestart");
-
-	$perfduration = get_post_meta($post->ID, '_tri_length_perfo', true) ? get_post_meta($post->ID, '_tri_length_perfo', true) : 5;
-	date_add($dateobj, date_interval_create_from_date_string( $perfduration . ' minutes'));
-	$dateend = date_format($dateobj, 'U');
-	//var_dump($datestart, $dateend);
-	//$dateend = get_post_meta($post->ID, '_tri_end_perfo', true);
 	if(get_post_type( $post->ID ) == 'performance') {
+
+		$datestart = get_post_meta($post->ID, '_tri_start_perfo', true);
+		$dateobj = new DateTime("@$datestart");
+
+		$perfduration = get_post_meta($post->ID, '_tri_length_perfo', true) ? get_post_meta($post->ID, '_tri_length_perfo', true) : 5;
+		date_add($dateobj, date_interval_create_from_date_string( $perfduration . ' minutes'));
+		$dateend = date_format($dateobj, 'U');
+		//var_dump($datestart, $dateend);
+		//$dateend = get_post_meta($post->ID, '_tri_end_perfo', true);
+	
 		wp_register_script( 'tripticodata', '', [], '', true);
 		wp_enqueue_script( 'tripticodata' );
 		wp_add_inline_script('tripticodata', 'const TRIPTICO = ' . json_encode( searchFilesInRange( $datestart, $dateend, $post->ID)) . '; const TRIPTICO_URLS = ' .json_encode( triptico_dataurls()) . '; const TRIPTICO_SENSORS = ' . json_encode( get_post_meta($post->ID, '_tri_sensores', true)) . '; const TRIPTICO_DEBUGFILES = ' . json_encode( triptico_debugfiles()) . ';');
