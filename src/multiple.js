@@ -11,6 +11,7 @@ import setupLineScene from "./setupLineScene.js";
 import updatePositions from "./updatePositions.js";
 import updateHTMLInfo from "./updateHTMLInfo.js";
 import updateImages from "./updateImages.js";
+import canvasSquares2D from "./canvasSquares2D.js";
 
 // Tres escenas
 function main(data) {
@@ -18,7 +19,7 @@ function main(data) {
 	const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 	const sceneElements = [];
 	const clock = new THREE.Clock();
-	const MAX_POINTS = data.acc2_i.length;
+	const MAX_POINTS = data.acc2_i !== undefined ? data.acc2_i.length : 10000;
 	let drawCount = 0;
 	let drawCount_right = 0;
 	let mouseX = 0;
@@ -27,6 +28,10 @@ function main(data) {
 	const infoZonesLeft = document.getElementById("infozones_left");
 	const infoZonesRight = document.getElementById("infozones_right");
 	const imageElement = document.getElementById("image_performance");
+	//2d stuff
+	let canvasrug = document.getElementById("triptico_squares");
+	let canvasWidth = canvasrug.clientWidth;
+
 	document.onmousemove = handleMouseMove;
 
 	function handleMouseMove(event) {
@@ -85,17 +90,22 @@ function main(data) {
 			for (let j = 0; j <= segments; j++) {
 				const x = j * segmentSize - halfSize;
 				vertices.push(x, -y, 0);
-				normals.push(0, 0, 1);
+				normals.push(
+					data["acc2_d"][i] ? data["acc2_d"][i].a[0] * 1.2 : 0,
+					data["acc2_d"][i] ? data["acc2_d"][i].a[1] * 1.2 : 0,
+					1
+				);
 
 				const r = data["acc2_d"][i] ? data["acc2_d"][i].a[0] * 1.2 : 0;
 				//const r = x / size + 0.5;
-				const g = data["acc2_d"][i] ? data["acc2_d"][i].a[1] * 1.2 : 0;
+				//const g = data["acc2_d"][i] ? data["acc2_d"][i].a[1] * 1.2 : 0;
 
-				const b = data["acc2_d"][i] ? data["acc2_d"][i].a[2] * 1.2 : 0;
-				//const g = y / size + 0.5;
+				//const b = data["acc2_d"][i] ? data["acc2_d"][i].a[2] * 1.2 : 0;
+				const g = x / size + 0.5;
+				const b = y / size + 0.5;
 				//const g = 0;
 
-				colors.push(r, g, b);
+				colors.push(r, g, 1);
 			}
 		}
 
@@ -129,14 +139,11 @@ function main(data) {
 
 		const material = new THREE.MeshPhongMaterial({
 			side: THREE.DoubleSide,
-			vertexColors: true,
+			vertexColors: THREE.VertexColors,
 		});
-
+		sceneInfo.geometry = geometry;
 		sceneInfo.plane = new THREE.Mesh(geometry, material);
 		sceneInfo.scene.add(sceneInfo.plane);
-
-		//sceneInfo.scene.add(plane);
-		//sceneInfo.scene.add(axesHelper);
 
 		return sceneInfo;
 	}
@@ -157,15 +164,6 @@ function main(data) {
 			position: [-1, 2, -2],
 		};
 		const sceneInfo = makeScene(canvasEl, camProps, lightProps);
-		// sceneInfo.controls = new THREE.OrbitControls(
-		// 	sceneInfo.camera,
-		// 	renderer.domElement
-		// );
-
-		// sceneInfo.controls.enableDamping = true;
-		// sceneInfo.controls.dampingFactor = 0.25;
-		// sceneInfo.controls.enableZoom = true;
-		// sceneInfo.controls.autoRotate = true;
 
 		sceneInfo.materialGreen = new THREE.MeshPhongMaterial({
 			color: colors.line_3,
@@ -190,8 +188,6 @@ function main(data) {
 		sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
 
 		sceneInfo.geometry = new THREE.PlaneGeometry(10, 1.2, 1);
-		//sceneInfo.scene.add(plane);
-		//sceneInfo.plane = plane;
 		sceneInfo.meshes = [];
 
 		return sceneInfo;
@@ -283,8 +279,8 @@ function main(data) {
 		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
 		sceneLineRight.line_1.geometry.setDrawRange(0, drawCount_right);
 
-		sceneLineLeft.line_1.rotation.x = time * 0.04;
-		sceneLineRight.line_1.rotation.x = time * 0.04;
+		sceneLineLeft.line_1.rotation.x = time * 0.14;
+		sceneLineRight.line_1.rotation.x = time * 0.14;
 		//sceneLineLeft.camera.position.x += 1;
 		//sceneLineLeft.camera.position.y += 1;
 
@@ -398,19 +394,27 @@ function main(data) {
 			}
 		}
 
-		rugScene.plane.rotation.x = curRotationc * 0.0025;
-		rugScene.plane.rotation.y = curRotationb * 0.0005;
+		rugScene.plane.rotation.x = curRotationc * 0.0125;
+		rugScene.plane.rotation.y = curRotationb * 0.0125;
 
-		//scene3D.scene.add(curmesh);
+		rugScene.geometry.attributes.color.array[drawCount] = 1;
+		rugScene.geometry.colorNeedUpdate = true;
 
 		scene3D.camera.position.x =
 			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.9;
 
-		scene3D.camera.rotation.y = curRotationd * 0.015;
+		scene3D.camera.rotation.y = curRotationd * 0.0005;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;
 
 		//console.log(drawCount);
 		//console.log(scene3D);
+		let squares = canvasSquares2D(
+			drawCount,
+			data["acc2_d"][drawCount].a[1],
+			MAX_POINTS,
+			canvasrug,
+			canvasWidth
+		);
 		renderSceneInfo(sceneLineLeft);
 		renderSceneInfo(sceneLineRight);
 		renderSceneInfo(scene3D);
@@ -420,7 +424,6 @@ function main(data) {
 	}
 
 	renderer.setClearColor(colors_morning.yellow, 1);
-
 	requestAnimationFrame(animate);
 }
 
