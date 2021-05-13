@@ -156,7 +156,7 @@ function main(data) {
 			near: 0.1,
 			far: 10000,
 			position: [3, 0, 12],
-			rotation: [0, 0, 0],
+			rotation: [0.1, 0, 0],
 		};
 		const lightProps = {
 			color: 0xffffff,
@@ -165,29 +165,74 @@ function main(data) {
 		};
 		const sceneInfo = makeScene(canvasEl, camProps, lightProps);
 
-		sceneInfo.materialGreen = new THREE.MeshPhongMaterial({
+		sceneInfo.materialLeft_1 = new THREE.MeshBasicMaterial({
+			color: 0x0099cc,
+		});
+
+		sceneInfo.materialLeft_2 = new THREE.MeshBasicMaterial({
+			color: 0x00a2cc,
+		});
+
+		sceneInfo.materialLeft_3 = new THREE.MeshBasicMaterial({
+			color: 0x0072cc,
+		});
+
+		sceneInfo.materialLeft_4 = new THREE.MeshBasicMaterial({
+			color: 0x6800f9,
+		});
+
+		sceneInfo.materialLeft_5 = new THREE.MeshBasicMaterial({
+			color: 0xa060f9,
+		});
+
+		sceneInfo.materialLeft_6 = new THREE.MeshBasicMaterial({
+			color: 0xceaff9,
+		});
+
+		sceneInfo.materialRight_1 = new THREE.MeshBasicMaterial({
+			color: 0x00b33c,
+		});
+
+		sceneInfo.materialRight_2 = new THREE.MeshBasicMaterial({
+			color: 0x00a00c,
+		});
+
+		sceneInfo.materialRight_3 = new THREE.MeshBasicMaterial({
+			color: 0x3fa346,
+		});
+
+		sceneInfo.materialRight_4 = new THREE.MeshBasicMaterial({
+			color: 0xd2a128,
+		});
+
+		sceneInfo.materialRight_5 = new THREE.MeshBasicMaterial({
+			color: 0xd28228,
+		});
+
+		sceneInfo.materialRight_6 = new THREE.MeshBasicMaterial({
+			color: 0xa3d228,
+		});
+
+		sceneInfo.materialGreen = new THREE.MeshBasicMaterial({
 			color: colors.line_3,
-			side: THREE.DoubleSide,
 		});
 
-		sceneInfo.materialRed = new THREE.MeshPhongMaterial({
+		sceneInfo.materialRed = new THREE.MeshBasicMaterial({
 			color: colors.line_4,
-			side: THREE.DoubleSide,
 		});
 
-		sceneInfo.materialBlue = new THREE.MeshPhongMaterial({
+		sceneInfo.materialBlue = new THREE.MeshBasicMaterial({
 			color: colors.line_1,
-			side: THREE.DoubleSide,
 		});
 
-		sceneInfo.materialYellow = new THREE.MeshPhongMaterial({
+		sceneInfo.materialYellow = new THREE.MeshBasicMaterial({
 			color: colors.line_2,
-			side: THREE.DoubleSide,
 		});
 
 		sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
 
 		sceneInfo.geometry = new THREE.PlaneGeometry(10, 1.2, 1);
+		sceneInfo.geometryAcc = new THREE.PlaneGeometry(0.6, 2, 1);
 		sceneInfo.meshes = [];
 
 		return sceneInfo;
@@ -304,23 +349,7 @@ function main(data) {
 			MAX_POINTS
 		);
 
-		//3d Scene
-		let curposition = data["acc2_d"][drawCount]
-			? data["acc2_d"][drawCount].a[0] * 1.2
-			: 0;
-
-		let curpositionb = data["acc2_i"][drawCount]
-			? data["acc2_i"][drawCount].g[0] * 1.2
-			: 0;
-
-		let curpositionc = data["acc2_i"][drawCount]
-			? data["acc2_i"][drawCount].g[1] * 1.2
-			: 0;
-
-		let curpositiond = data["acc2_d"][drawCount]
-			? data["acc2_d"][drawCount].a[1] * 1.2
-			: 0;
-
+		//Rotaciones arbitrarias
 		let curRotation = data["acc2_d"][drawCount]
 			? data["acc2_d"][drawCount].g[2] * 1.2
 			: 0;
@@ -329,21 +358,36 @@ function main(data) {
 			? data["acc2_i"][drawCount].a[1] * 1.2
 			: 0;
 
-		let curRotationc = data["acc2_i"][drawCount]
-			? data["acc2_i"][drawCount].a[0] * 1.2
+		let curRotationc = data["acc2_d"][drawCount]
+			? data["acc2_i"][drawCount].a[1] * 1.2
 			: 0;
 
 		let curRotationd = data["acc2_d"][drawCount]
 			? data["acc2_d"][drawCount].a[1] * 1.2
 			: 0;
 
+		//3d Scene
+		//1. Acelerometro Izquierda
+		//Angulo
+		let curposition = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].a[0] * 1.2
+			: 0;
+
+		let curpositionb = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].a[1] * 1.2
+			: 0;
+
+		let curpositionc = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].a[2] * 1.2
+			: 0;
+
 		scene3D.meshes.push(
 			addMesh(
 				scene3D.geometry,
-				scene3D.materialGreen,
+				scene3D.materialLeft_1,
+				curposition - 65,
 				drawCount * 0.9,
-				curposition,
-				0.4,
+				-1.4,
 				curRotation,
 				scene3D.scene
 			)
@@ -352,23 +396,106 @@ function main(data) {
 		scene3D.meshes.push(
 			addMesh(
 				scene3D.geometry,
-				scene3D.materialRed,
+				scene3D.materialLeft_2,
+				curpositionb - 60,
 				drawCount * 0.9,
-				curpositionb,
+				-0.8,
+				curRotation,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometry,
+				scene3D.materialLeft_3,
+				curpositionc - 55,
+				drawCount * 0.9,
+				-0.4,
+				curRotation,
+				scene3D.scene
+			)
+		);
+
+		//Aceleracion
+		let curpositiond = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].g[0] * 4.2
+			: 0;
+
+		let curpositione = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].g[1] * 4.2
+			: 0;
+
+		let curpositionf = data["acc2_i"][drawCount]
+			? data["acc2_i"][drawCount].g[2] * 4.2
+			: 0;
+
+		//Sensor 1 / Izquierda
+		//Aceleracion
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometryAcc,
+				scene3D.materialLeft_4,
+				curpositiond - 60,
+				drawCount * 0.9,
+				-1.4,
 				curRotationb,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometryAcc,
+				scene3D.materialLeft_5,
+				curpositione - 55,
+				drawCount * 0.9,
+				-0.8,
+				curRotationb,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometryAcc,
+				scene3D.materialLeft_6,
+				curpositionf - 50,
+				drawCount * 0.9,
+				-0.4,
+				curRotationb,
+				scene3D.scene
+			)
+		);
+
+		//2. Acelerometro derecha
+		//Angulo
+		let curpositiong = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].a[0] * 1.2
+			: 0;
+
+		let curpositionh = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].a[1] * 1.2
+			: 0;
+
+		let curpositioni = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].a[2] * 1.2
+			: 0;
+
+		//Sensor 2 / Derecha
+		//Aceleracion
+
+		//Angulo
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometry,
+				scene3D.materialRight_1,
+				curpositiong + 30,
+				drawCount * 0.9,
 				0.8,
-				scene3D.scene
-			)
-		);
-
-		scene3D.meshes.push(
-			addMesh(
-				scene3D.geometry,
-				scene3D.materialBlue,
-				drawCount * 0.9,
-				curpositionc,
 				curRotationc,
-				1.2,
 				scene3D.scene
 			)
 		);
@@ -376,14 +503,77 @@ function main(data) {
 		scene3D.meshes.push(
 			addMesh(
 				scene3D.geometry,
-				scene3D.materialYellow,
+				scene3D.materialRight_2,
+				curpositionh + 35,
 				drawCount * 0.9,
-				curpositiond,
-				curRotationd,
-				1.6,
+				1.2,
+				curRotationc,
 				scene3D.scene
 			)
 		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometry,
+				scene3D.materialRight_3,
+				curpositioni + 40,
+				drawCount * 0.9,
+				1.8,
+				curRotationc,
+				scene3D.scene
+			)
+		);
+
+		//Aceleracion
+		let curpositionj = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].g[0] * 4.2
+			: 0;
+
+		let curpositionk = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].g[1] * 4.2
+			: 0;
+
+		let curpositionl = data["acc2_d"][drawCount]
+			? data["acc2_d"][drawCount].g[2] * 4.2
+			: 0;
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometryAcc,
+				scene3D.materialRight_4,
+				curpositionj + 30,
+				drawCount * 0.9,
+				0.8,
+				curRotation,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometryAcc,
+				scene3D.materialRight_5,
+				curpositionk + 35,
+				drawCount * 0.9,
+				1.2,
+				curRotation,
+				scene3D.scene
+			)
+		);
+
+		scene3D.meshes.push(
+			addMesh(
+				scene3D.geometryAcc,
+				scene3D.materialRight_6,
+				curpositionk + 40,
+				drawCount * 0.9,
+				1.8,
+				curRotation,
+				scene3D.scene
+			)
+		);
+
+		//Angulo
 
 		if (scene3D.meshes.length > 300) {
 			//console.log(meshes[0], meshes.length);
@@ -400,8 +590,8 @@ function main(data) {
 		rugScene.geometry.attributes.color.array[drawCount] = 1;
 		rugScene.geometry.colorNeedUpdate = true;
 
-		scene3D.camera.position.x =
-			drawCount === 0 ? 0 : scene3D.camera.position.x + 0.9;
+		scene3D.camera.position.y =
+			drawCount === 0 ? 0 : scene3D.camera.position.y + 0.9;
 
 		scene3D.camera.rotation.y = curRotationd * 0.0005;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;
@@ -418,7 +608,7 @@ function main(data) {
 		renderSceneInfo(sceneLineLeft);
 		renderSceneInfo(sceneLineRight);
 		renderSceneInfo(scene3D);
-		renderSceneInfo(rugScene);
+		//renderSceneInfo(rugScene);
 
 		window.addEventListener("resize", renderer);
 	}

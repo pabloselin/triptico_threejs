@@ -23,7 +23,7 @@ function addMesh(geometry, material, x, y, z, rotX, scene) {
 	plane.position.x = x;
 	plane.position.y = y;
 	plane.position.z = z;
-	plane.rotation.x = 0; //rotX * 0.3;
+	plane.rotation.x = rotX * 0.01; //rotX * 0.3;
 	plane.rotation.y = 0; //rotX * 0.5;
 	plane.rotation.z = 0;
 

@@ -14,19 +14,19 @@ function canvasSquares2D(key, data, dataSize, canvas, width) {
 		if (key < 300) {
 			return 0;
 		} else if (key < 600) {
-			return 10;
+			return 5;
 		} else if (key < 900) {
-			return 20;
+			return 10;
 		} else if (key < 1200) {
-			return 30;
+			return 15;
 		} else if (key < 1500) {
-			return 40;
+			return 20;
 		} else if (key < 1800) {
-			return 50;
+			return 25;
 		} else if (key < 2100) {
-			return 60;
+			return 30;
 		} else if (key < 2300) {
-			return 70;
+			return 35;
 		}
 	}
 
