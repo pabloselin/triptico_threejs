@@ -78,11 +78,29 @@ header.entry-header {
 	height: 60vh;
 }
 
-#triptico_canvas_rug {
+#triptico_bottom {
 	width: 100%;
 	height: 40vh;
-	background-color: white;
+}
+
+#triptico_canvas_rug {
+	width: 100%;
+	height: 30vh;
+	background-color: transparent;
 	position: relative;
+}
+
+#bottomimgs {
+	width: 100%;
+	overflow: hidden;
+	height: 10vh;
+	display: flex;
+}
+
+#bottomimgs img {
+	flex-shrink: 3;
+	width: 20px;
+	height: 12px;
 }
 
 #triptico_squares {
@@ -91,7 +109,7 @@ header.entry-header {
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: transparent;
 	opacity: 0.5;
 }
 

@@ -1,41 +1,33 @@
-function canvasSquares2D(key, data, dataSize, canvas, width) {
+function canvasSquares2D(key, data, dataSize, canvas, width, height) {
 	let sw = 4; //square width
+	let sh = 20;
 	let ctx = canvas.getContext("2d");
 	function init(key, data) {
-		console.log(width);
+		if (key === 0) {
+			ctx.clearRect(0, 0, width, height);
+		}
+		let colCount = width / sw;
+		let rowCount = colCount + 10;
+		let posx = key * sw;
+		let posy = key * sh;
 		// outlined square X: 50, Y: 35, width/height 50
 		// filled square X: 125, Y: 35, width/height 50
 		ctx.beginPath();
 		ctx.fillStyle = `rgba(${255 - (data % 255) * 5}, 0, 0, 1)`;
-		ctx.fillRect(checkCol(key), checkRow(key), sw, sw);
+		ctx.fillRect(
+			checkCol(posx, colCount),
+			checkRow(posy, rowCount),
+			sw,
+			sw
+		);
 	}
 
-	function checkRow(key) {
-		if (key < 300) {
-			return 0;
-		} else if (key < 600) {
-			return 5;
-		} else if (key < 900) {
-			return 10;
-		} else if (key < 1200) {
-			return 15;
-		} else if (key < 1500) {
-			return 20;
-		} else if (key < 1800) {
-			return 25;
-		} else if (key < 2100) {
-			return 30;
-		} else if (key < 2300) {
-			return 35;
-		}
+	function checkRow(key, rowCount) {
+		return key / rowCount;
 	}
 
-	function checkCol(key) {
-		if (key * sw > width) {
-			return key % width;
-		} else {
-			return key;
-		}
+	function checkCol(key, colCount) {
+		return key % colCount;
 	}
 
 	//document.addEventListener("DOMContentLoaded", init);

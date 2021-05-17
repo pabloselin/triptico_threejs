@@ -28,11 +28,22 @@ function main(data) {
 	const infoZonesLeft = document.getElementById("infozones_left");
 	const infoZonesRight = document.getElementById("infozones_right");
 	const imageElement = document.getElementById("image_performance");
+	const imagesBottom = document.getElementById("bottomimgs");
 	//2d stuff
 	let canvasrug = document.getElementById("triptico_squares");
 	let canvasWidth = canvasrug.clientWidth;
+	let canvasHeight = canvasrug.clientHeight;
 
 	document.onmousemove = handleMouseMove;
+
+	//put images
+	let imgkeys = TRIPTICO.img.length;
+	console.log(imgkeys);
+	for (let i = 0; i < imgkeys; i++) {
+		let img = document.createElement("img");
+		img.setAttribute("src", TRIPTICO_URLS.img + TRIPTICO.img[i]);
+		imagesBottom.appendChild(img);
+	}
 
 	function handleMouseMove(event) {
 		if (event.pageX < mouseX) {
@@ -341,13 +352,13 @@ function main(data) {
 
 		updateHTMLInfo(data["acc2_i"], infoZonesLeft, drawCount);
 		updateHTMLInfo(data["acc2_d"], infoZonesRight, drawCount);
-		updateImages(
-			imageElement,
-			TRIPTICO.img,
-			drawCount,
-			TRIPTICO_URLS.img,
-			MAX_POINTS
-		);
+		// updateImages(
+		// 	imageElement,
+		// 	TRIPTICO.img,
+		// 	drawCount,
+		// 	TRIPTICO_URLS.img,
+		// 	MAX_POINTS
+		// );
 
 		//Rotaciones arbitrarias
 		let curRotation = data["acc2_d"][drawCount]
@@ -598,13 +609,16 @@ function main(data) {
 
 		//console.log(drawCount);
 		//console.log(scene3D);
-		let squares = canvasSquares2D(
-			drawCount,
-			data["acc2_d"][drawCount].a[1],
-			MAX_POINTS,
-			canvasrug,
-			canvasWidth
-		);
+		if (data["acc2_d"]) {
+			let squares = canvasSquares2D(
+				drawCount,
+				data["acc2_d"][drawCount].a[1],
+				MAX_POINTS,
+				canvasrug,
+				canvasWidth,
+				canvasHeight
+			);
+		}
 		renderSceneInfo(sceneLineLeft);
 		renderSceneInfo(sceneLineRight);
 		renderSceneInfo(scene3D);
