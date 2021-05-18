@@ -20,6 +20,7 @@ function main(data) {
 	const sceneElements = [];
 	const clock = new THREE.Clock();
 	const MAX_POINTS = data.acc2_i !== undefined ? data.acc2_i.length : 10000;
+	const CAMERA_INCREMENT = 0.7;
 	let drawCount = 0;
 	let drawCount_right = 0;
 	let mouseX = 0;
@@ -29,19 +30,28 @@ function main(data) {
 	const infoZonesRight = document.getElementById("infozones_right");
 	const imageElement = document.getElementById("image_performance");
 	const imagesBottom = document.getElementById("bottomimgs");
+
+	const keyzone = document.getElementById("keyzone");
+
 	//2d stuff
 	let canvasrug = document.getElementById("triptico_squares");
-	let canvasWidth = canvasrug.clientWidth;
-	let canvasHeight = canvasrug.clientHeight;
+	let canvascontainer = document.getElementById("triptico_canvas_rug");
+	let canvasWidth = canvascontainer.clientWidth;
+	let canvasHeight = canvascontainer.clientHeight;
+	console.log(canvasWidth, canvasHeight);
 
 	document.onmousemove = handleMouseMove;
 
 	//put images
 	let imgkeys = TRIPTICO.img.length;
+	let imgEls = [];
 	console.log(imgkeys);
 	for (let i = 0; i < imgkeys; i++) {
+		console.log("run once");
 		let img = document.createElement("img");
 		img.setAttribute("src", TRIPTICO_URLS.img + TRIPTICO.img[i]);
+		img.dataset.index = i;
+		imgEls.push(img);
 		imagesBottom.appendChild(img);
 	}
 
@@ -340,12 +350,12 @@ function main(data) {
 		//sceneLineLeft.camera.position.x += 1;
 		//sceneLineLeft.camera.position.y += 1;
 
-		updatePositions(sceneLineLeft.line_1, data["acc2_d"], MAX_POINTS);
+		updatePositions(sceneLineLeft.line_1, data["acc2_d"], MAX_POINTS, "a");
 		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
 		sceneLineLeft.line_1.geometry.attributes.position.needsUpdate = true;
 		//sceneLineLeft.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
-		updatePositions(sceneLineRight.line_1, data["acc2_i"], MAX_POINTS);
+		updatePositions(sceneLineRight.line_1, data["acc2_i"], MAX_POINTS, "a");
 		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
 		sceneLineRight.line_1.geometry.attributes.position.needsUpdate = true;
 		//sceneLineRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
@@ -359,6 +369,8 @@ function main(data) {
 		// 	TRIPTICO_URLS.img,
 		// 	MAX_POINTS
 		// );
+
+		updateImages(keyzone, drawCount, imgEls.length, MAX_POINTS);
 
 		//Rotaciones arbitrarias
 		let curRotation = data["acc2_d"][drawCount]
@@ -602,7 +614,7 @@ function main(data) {
 		rugScene.geometry.colorNeedUpdate = true;
 
 		scene3D.camera.position.y =
-			drawCount === 0 ? 0 : scene3D.camera.position.y + 0.9;
+			drawCount === 0 ? 0 : scene3D.camera.position.y + CAMERA_INCREMENT;
 
 		scene3D.camera.rotation.y = curRotationd * 0.0005;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;

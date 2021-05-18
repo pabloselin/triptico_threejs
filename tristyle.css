@@ -75,17 +75,17 @@ header.entry-header {
 
 #triptico_canvas_3d {
 	width: 100%;
-	height: 60vh;
+	height: 50vh;
 }
 
 #triptico_bottom {
 	width: 100%;
-	height: 40vh;
+	height: 50vh;
 }
 
 #triptico_canvas_rug {
 	width: 100%;
-	height: 30vh;
+	height: 38vh;
 	background-color: transparent;
 	position: relative;
 }
@@ -93,14 +93,20 @@ header.entry-header {
 #bottomimgs {
 	width: 100%;
 	overflow: hidden;
-	height: 10vh;
+	margin-bottom: 40px;
 	display: flex;
+	justify-content: space-between;
 }
 
 #bottomimgs img {
-	flex-shrink: 3;
-	width: 20px;
-	height: 12px;
+	width: 40px;
+	height: auto;
+}
+
+#bottomimgs img.active {
+	border: 1px solid red;
+	opacity: 0.8;
+	background-color: red;
 }
 
 #triptico_squares {

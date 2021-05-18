@@ -6,8 +6,8 @@ function canvasSquares2D(key, data, dataSize, canvas, width, height) {
 		if (key === 0) {
 			ctx.clearRect(0, 0, width, height);
 		}
-		let colCount = width / sw;
-		let rowCount = colCount + 10;
+		let colCount = width / sw + 60;
+		let rowCount = colCount + 20;
 		let posx = key * sw;
 		let posy = key * sh;
 		// outlined square X: 50, Y: 35, width/height 50

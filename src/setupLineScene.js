@@ -37,7 +37,7 @@ function setupLineScene(canvasEl, data, maxpoints, drawCount, color) {
 	sceneInfo.line_1 = line_acc2_i;
 
 	//updatePositions(sceneInfo.line_1, data["acc2_d"]);
-	updatePositions(sceneInfo.line_1, data);
+	updatePositions(sceneInfo.line_1, data, maxpoints, "a");
 	sceneInfo.geometry = geometry;
 	sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
 

@@ -16,6 +16,14 @@ function updateHTMLInfo(data, element, key) {
 				<span class="z">${data[key].a[2].toFixed(2)}</span>
 				<i>${key}</i></p>`;
 	}
+
+	if (key === 0) {
+		let otherimgs = document.querySelector("#bottomimgs img");
+		console.log(otherimgs);
+		for (let i = 0; i < otherimgs.length; i++) {
+			otherimgs[i].classList.remove("active");
+		}
+	}
 }
 
 export default updateHTMLInfo;

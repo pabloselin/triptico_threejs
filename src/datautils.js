@@ -2,7 +2,8 @@ import CSVToArray from "./csvtoarray.js";
 
 const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 	let data = {};
-	sensors.map((sensor) => {
+	let hasrun = false;
+	sensors.map((sensor, sensorkey) => {
 		let tmpdata = [];
 		for (let i = 0; i < files[sensor].length; i++) {
 			//console.log(acc2_d[i]);
@@ -19,7 +20,17 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 					.then((key) => {
 						//console.log(acc2_d_tmpdata)
 						data[sensor] = joinData(tmpdata, files[sensor].length);
-						runMain(data);
+					})
+					.then(() => {
+						if (
+							hasrun === false &&
+							data.acc2_d !== undefined &&
+							data.acc2_d.length > 0
+						) {
+							console.log(data);
+							runMain(data);
+							hasrun = true;
+						}
 					});
 			}
 		}
