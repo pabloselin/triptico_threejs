@@ -31,16 +31,19 @@ $mainpath = ABSPATH;
 $csv_1 = 'tripticoEdge/RPiIMU/';
 $csv_2 = 'tripticoEdge/RPiIMU2/';
 $imgs = 'tripticoEdge/RPiFotos/';
+$imgs_resized = 'tripticoEdge/resizedimgs/';
 $audios = 'tripticoEdge/RPiREC/';
 
 define( 'TRI_CSVFOLDER', $mainpath .  $csv_1);
 define( 'TRI_CSV2FOLDER', $mainpath . $csv_2);
 define( 'TRI_IMGFOLDER', $mainpath . $imgs );
+define( 'TRI_THUMBFOLDER', $mainpath . $imgs_resized);
 define( 'TRI_AUDIOFOLDER', $mainpath . $audios );
 
 define( 'TRI_CSVURL', get_bloginfo('url') . '/' . $csv_1);
 define( 'TRI_CSV2URL', get_bloginfo('url') . '/' . $csv_2);
 define( 'TRI_IMGURL', get_bloginfo('url') . '/' . $imgs);
+define( 'TRI_THUMBURL', get_bloginfo( 'url') . '/' . $imgs_resized);
 define( 'TRI_AUDIOURL', get_bloginfo('url') . '/' . $audios);
 
 function triptico_dataurls() {
@@ -49,6 +52,7 @@ function triptico_dataurls() {
 		'csv_2'	=> TRI_CSV2URL,
 		'img'	=> TRI_IMGURL,
 		'audio'	=> TRI_AUDIOURL
+
 	);
 
 	return $urls;
@@ -84,6 +88,13 @@ function searchFilesInRange($datestart, $dateend, $postid) {
 			}
 		}
 
+		if(count($files['img']) > 0) {
+			$files['img_resized'] = array();
+			foreach($files['img'] as $bigimg) {
+				$files['img_resized'][] = triptico_resizeimages($bigimg);
+			}
+		}
+
 		return $files;
 	} else {
 		return 'No se asignaron sensores';
@@ -92,6 +103,22 @@ function searchFilesInRange($datestart, $dateend, $postid) {
 
 function triptico_debugfiles() {
 	return filesList(TRI_IMGFOLDER);
+}
+
+function triptico_resizeimages($image) {
+	$basename = basename($image, '.jpg');
+	$newname = $basename . '_resized.jpg';
+	$imagepath = TRI_IMGFOLDER . $image;
+	$resizedexists = TRI_THUMBFOLDER . $newname;
+	$resizedurl = TRI_THUMBURL . '/' .$newname . '?exists=false';
+	$image = wp_get_image_editor($imagepath);
+	$imageurl = $imagepath;
+	if(!is_wp_error($image) && !file_exists($resizedexists)) {
+		$image->resize(30, 20, true);
+		$image->save(TRI_THUMBFOLDER . $newname);
+	}
+
+	return $resizedurl;
 }
 
 function searchFilesInRangeFolder($datestart, $dateend, $folder, $extension, $suffix = '') {

@@ -1,6 +1,6 @@
 import { colors } from "./colors.js";
 
-function updateHTMLInfo(data, element, key) {
+function updateHTMLInfo(data, element, key, curcanvas) {
 	const keycount = document.getElementById("keycount");
 	keycount.innerHTML = `[${key}/${data.length}]`;
 
@@ -15,6 +15,12 @@ function updateHTMLInfo(data, element, key) {
 				<span class="y">${data[key].a[1].toFixed(2)}</span>
 				<span class="z">${data[key].a[2].toFixed(2)}</span>
 				<i>${key}</i></p>`;
+
+		let fraction = parseInt(data.length / TRIPTICO.img.length);
+		let zone = parseInt(key / fraction);
+		curcanvas.style.backgroundImage = `url(${
+			TRIPTICO_URLS.img + TRIPTICO.img[zone]
+		})`;
 	}
 
 	if (key === 0) {

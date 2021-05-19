@@ -15,12 +15,14 @@ import canvasSquares2D from "./canvasSquares2D.js";
 
 // Tres escenas
 function main(data) {
+	const MAX_POINTS = data.acc2_i.length;
+	const CAMERA_INCREMENT = 0.7;
+
 	const canvas = document.querySelector("#triptico_canvas");
 	const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 	const sceneElements = [];
 	const clock = new THREE.Clock();
-	const MAX_POINTS = data.acc2_i !== undefined ? data.acc2_i.length : 10000;
-	const CAMERA_INCREMENT = 0.7;
+
 	let drawCount = 0;
 	let drawCount_right = 0;
 	let mouseX = 0;
@@ -36,6 +38,7 @@ function main(data) {
 	//2d stuff
 	let canvasrug = document.getElementById("triptico_squares");
 	let canvascontainer = document.getElementById("triptico_canvas_rug");
+	console.log(canvascontainer);
 	let canvasWidth = canvascontainer.clientWidth;
 	let canvasHeight = canvascontainer.clientHeight;
 	console.log(canvasWidth, canvasHeight);
@@ -43,13 +46,13 @@ function main(data) {
 	document.onmousemove = handleMouseMove;
 
 	//put images
-	let imgkeys = TRIPTICO.img.length;
+	let imgkeys = TRIPTICO.img_resized.length;
 	let imgEls = [];
 	console.log(imgkeys);
 	for (let i = 0; i < imgkeys; i++) {
 		console.log("run once");
 		let img = document.createElement("img");
-		img.setAttribute("src", TRIPTICO_URLS.img + TRIPTICO.img[i]);
+		img.setAttribute("src", TRIPTICO.img_resized[i]);
 		img.dataset.index = i;
 		imgEls.push(img);
 		imagesBottom.appendChild(img);
@@ -360,8 +363,18 @@ function main(data) {
 		sceneLineRight.line_1.geometry.attributes.position.needsUpdate = true;
 		//sceneLineRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
-		updateHTMLInfo(data["acc2_i"], infoZonesLeft, drawCount);
-		updateHTMLInfo(data["acc2_d"], infoZonesRight, drawCount);
+		updateHTMLInfo(
+			data["acc2_i"],
+			infoZonesLeft,
+			drawCount,
+			canvascontainer
+		);
+		updateHTMLInfo(
+			data["acc2_d"],
+			infoZonesRight,
+			drawCount,
+			canvascontainer
+		);
 		// updateImages(
 		// 	imageElement,
 		// 	TRIPTICO.img,
@@ -404,13 +417,27 @@ function main(data) {
 			? data["acc2_i"][drawCount].a[2] * 1.2
 			: 0;
 
+		let zLeft = [
+			0.4 * curposition * 0.5,
+			0.8 * curposition * 0.5,
+			1.2 * curposition * 0.5,
+		];
+		let zRight = [
+			1.6 * curposition * 0.5,
+			2 * curposition * 0.5,
+			2.4 * curposition * 0.5,
+		];
+
+		let xLeftIncrement = [-10, -5, 0];
+		let xRightIncrement = [0, 5, 10];
+
 		scene3D.meshes.push(
 			addMesh(
 				scene3D.geometry,
 				scene3D.materialLeft_1,
-				curposition - 65,
+				curposition + xLeftIncrement[0],
 				drawCount * 0.9,
-				-1.4,
+				zLeft[0],
 				curRotation,
 				scene3D.scene
 			)
@@ -420,9 +447,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometry,
 				scene3D.materialLeft_2,
-				curpositionb - 60,
+				curpositionb + xLeftIncrement[1],
 				drawCount * 0.9,
-				-0.8,
+				zLeft[1],
 				curRotation,
 				scene3D.scene
 			)
@@ -432,9 +459,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometry,
 				scene3D.materialLeft_3,
-				curpositionc - 55,
+				curpositionc + xLeftIncrement[2],
 				drawCount * 0.9,
-				-0.4,
+				zLeft[2],
 				curRotation,
 				scene3D.scene
 			)
@@ -460,9 +487,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometryAcc,
 				scene3D.materialLeft_4,
-				curpositiond - 60,
+				curpositiond + xLeftIncrement[0],
 				drawCount * 0.9,
-				-1.4,
+				zLeft[0],
 				curRotationb,
 				scene3D.scene
 			)
@@ -472,9 +499,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometryAcc,
 				scene3D.materialLeft_5,
-				curpositione - 55,
+				curpositione + xLeftIncrement[1],
 				drawCount * 0.9,
-				-0.8,
+				zLeft[1],
 				curRotationb,
 				scene3D.scene
 			)
@@ -484,9 +511,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometryAcc,
 				scene3D.materialLeft_6,
-				curpositionf - 50,
+				curpositionf + xLeftIncrement[2],
 				drawCount * 0.9,
-				-0.4,
+				zLeft[2],
 				curRotationb,
 				scene3D.scene
 			)
@@ -515,9 +542,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometry,
 				scene3D.materialRight_1,
-				curpositiong + 30,
+				curpositiong + xRightIncrement[0],
 				drawCount * 0.9,
-				0.8,
+				zRight[0],
 				curRotationc,
 				scene3D.scene
 			)
@@ -527,9 +554,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometry,
 				scene3D.materialRight_2,
-				curpositionh + 35,
+				curpositionh + xRightIncrement[1],
 				drawCount * 0.9,
-				1.2,
+				zRight[1],
 				curRotationc,
 				scene3D.scene
 			)
@@ -539,9 +566,9 @@ function main(data) {
 			addMesh(
 				scene3D.geometry,
 				scene3D.materialRight_3,
-				curpositioni + 40,
+				curpositioni + xRightIncrement[2],
 				drawCount * 0.9,
-				1.8,
+				zRight[2],
 				curRotationc,
 				scene3D.scene
 			)
@@ -564,7 +591,7 @@ function main(data) {
 			addMesh(
 				scene3D.geometryAcc,
 				scene3D.materialRight_4,
-				curpositionj + 30,
+				curpositionj + xRightIncrement[0],
 				drawCount * 0.9,
 				0.8,
 				curRotation,
@@ -576,7 +603,7 @@ function main(data) {
 			addMesh(
 				scene3D.geometryAcc,
 				scene3D.materialRight_5,
-				curpositionk + 35,
+				curpositionk + xRightIncrement[1],
 				drawCount * 0.9,
 				1.2,
 				curRotation,
@@ -588,7 +615,7 @@ function main(data) {
 			addMesh(
 				scene3D.geometryAcc,
 				scene3D.materialRight_6,
-				curpositionk + 40,
+				curpositionk + xRightIncrement[2],
 				drawCount * 0.9,
 				1.8,
 				curRotation,

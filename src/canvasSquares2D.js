@@ -1,13 +1,18 @@
 function canvasSquares2D(key, data, dataSize, canvas, width, height) {
-	let sw = 4; //square width
-	let sh = 20;
+	let sw = 7.5; //square width
+	let sh = 5;
 	let ctx = canvas.getContext("2d");
+	let imgs = document.querySelectorAll("#bottomimgs img");
+	let fraction = parseInt(dataSize / imgs.length);
+	let zone = parseInt(key / fraction);
+	let curimg = imgs[zone];
+
 	function init(key, data) {
 		if (key === 0) {
 			ctx.clearRect(0, 0, width, height);
 		}
-		let colCount = width / sw + 60;
-		let rowCount = colCount + 20;
+		let colCount = width / sw + 130;
+		let rowCount = height / sh;
 		let posx = key * sw;
 		let posy = key * sh;
 		// outlined square X: 50, Y: 35, width/height 50
@@ -18,7 +23,15 @@ function canvasSquares2D(key, data, dataSize, canvas, width, height) {
 			checkCol(posx, colCount),
 			checkRow(posy, rowCount),
 			sw,
-			sw
+			sh
+		);
+		ctx.imageSmoothingEnabled = false;
+		ctx.drawImage(
+			curimg,
+			checkCol(posx, colCount),
+			checkRow(posy, rowCount),
+			sw,
+			sh
 		);
 	}
 
