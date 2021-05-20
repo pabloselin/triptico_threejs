@@ -16,7 +16,7 @@ import canvasSquares2D from "./canvasSquares2D.js";
 // Tres escenas
 function main(data) {
 	const MAX_POINTS = data.acc2_i.length;
-	const CAMERA_INCREMENT = 0;
+	const CAMERA_INCREMENT = 0.7;
 
 	const canvas = document.querySelector("#triptico_canvas");
 	const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
