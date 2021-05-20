@@ -16,7 +16,7 @@ import canvasSquares2D from "./canvasSquares2D.js";
 // Tres escenas
 function main(data) {
 	const MAX_POINTS = data.acc2_i.length;
-	const CAMERA_INCREMENT = 0.7;
+	const CAMERA_INCREMENT = 0;
 
 	const canvas = document.querySelector("#triptico_canvas");
 	const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
@@ -38,7 +38,7 @@ function main(data) {
 	//2d stuff
 	let canvasrug = document.getElementById("triptico_squares");
 	let canvascontainer = document.getElementById("triptico_canvas_rug");
-	console.log(canvascontainer);
+	let imageContainer = document.querySelector("#centerimg .centerimgimg");
 	let canvasWidth = canvascontainer.clientWidth;
 	let canvasHeight = canvascontainer.clientHeight;
 	console.log(canvasWidth, canvasHeight);
@@ -83,9 +83,8 @@ function main(data) {
 			rotation: [0, 0, 0],
 		};
 		const lightProps = {
-			color: 0xffffff,
+			color: 0xd4b6ff,
 			intensity: 1,
-			position: [-1, 2, 4],
 		};
 		const sceneInfo = makeScene(
 			document.querySelector("#triptico_canvas_rug_right"),
@@ -175,87 +174,87 @@ function main(data) {
 	function setup3dScene() {
 		const canvasEl = document.querySelector("#triptico_canvas_3d");
 		const camProps = {
-			fov: 155,
+			fov: 55,
 			aspect: 2,
 			near: 0.1,
 			far: 10000,
-			position: [3, 0, 12],
-			rotation: [0.1, 0, 0],
+			position: [3, 0, 42],
+			rotation: [0.6, 0, 0],
 		};
 		const lightProps = {
-			color: 0xffffff,
-			intensity: 1,
-			position: [-1, 2, -2],
+			color: 0xef9c29,
+			intensity: 0.6,
+			position: [0, 1, -2],
 		};
 		const sceneInfo = makeScene(canvasEl, camProps, lightProps);
 
-		sceneInfo.materialLeft_1 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialLeft_1 = new THREE.MeshPhongMaterial({
 			color: 0x0099cc,
 		});
 
-		sceneInfo.materialLeft_2 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialLeft_2 = new THREE.MeshPhongMaterial({
 			color: 0x00a2cc,
 		});
 
-		sceneInfo.materialLeft_3 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialLeft_3 = new THREE.MeshPhongMaterial({
 			color: 0x0072cc,
 		});
 
-		sceneInfo.materialLeft_4 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialLeft_4 = new THREE.MeshPhongMaterial({
 			color: 0x6800f9,
 		});
 
-		sceneInfo.materialLeft_5 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialLeft_5 = new THREE.MeshPhongMaterial({
 			color: 0xa060f9,
 		});
 
-		sceneInfo.materialLeft_6 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialLeft_6 = new THREE.MeshPhongMaterial({
 			color: 0xceaff9,
 		});
 
-		sceneInfo.materialRight_1 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRight_1 = new THREE.MeshPhongMaterial({
 			color: 0x00b33c,
 		});
 
-		sceneInfo.materialRight_2 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRight_2 = new THREE.MeshPhongMaterial({
 			color: 0x00a00c,
 		});
 
-		sceneInfo.materialRight_3 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRight_3 = new THREE.MeshPhongMaterial({
 			color: 0x3fa346,
 		});
 
-		sceneInfo.materialRight_4 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRight_4 = new THREE.MeshPhongMaterial({
 			color: 0xd2a128,
 		});
 
-		sceneInfo.materialRight_5 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRight_5 = new THREE.MeshPhongMaterial({
 			color: 0xd28228,
 		});
 
-		sceneInfo.materialRight_6 = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRight_6 = new THREE.MeshPhongMaterial({
 			color: 0xa3d228,
 		});
 
-		sceneInfo.materialGreen = new THREE.MeshBasicMaterial({
+		sceneInfo.materialGreen = new THREE.MeshPhongMaterial({
 			color: colors.line_3,
 		});
 
-		sceneInfo.materialRed = new THREE.MeshBasicMaterial({
+		sceneInfo.materialRed = new THREE.MeshPhongMaterial({
 			color: colors.line_4,
 		});
 
-		sceneInfo.materialBlue = new THREE.MeshBasicMaterial({
+		sceneInfo.materialBlue = new THREE.MeshPhongMaterial({
 			color: colors.line_1,
 		});
 
-		sceneInfo.materialYellow = new THREE.MeshBasicMaterial({
+		sceneInfo.materialYellow = new THREE.MeshPhongMaterial({
 			color: colors.line_2,
 		});
 
 		sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
 
-		sceneInfo.geometry = new THREE.PlaneGeometry(10, 1.2, 1);
+		sceneInfo.geometry = new THREE.CylinderGeometry(0.4, 0.6, 6, 24);
 		sceneInfo.geometryAcc = new THREE.PlaneGeometry(0.6, 2, 1);
 		sceneInfo.meshes = [];
 
@@ -367,13 +366,13 @@ function main(data) {
 			data["acc2_i"],
 			infoZonesLeft,
 			drawCount,
-			canvascontainer
+			imageContainer
 		);
 		updateHTMLInfo(
 			data["acc2_d"],
 			infoZonesRight,
 			drawCount,
-			canvascontainer
+			imageContainer
 		);
 		// updateImages(
 		// 	imageElement,
@@ -417,19 +416,20 @@ function main(data) {
 			? data["acc2_i"][drawCount].a[2] * 1.2
 			: 0;
 
+		let zFactor = 0.1;
 		let zLeft = [
-			0.4 * curposition * 0.5,
-			0.8 * curposition * 0.5,
-			1.2 * curposition * 0.5,
+			0.4 * curposition * zFactor,
+			0.8 * curposition * zFactor,
+			1.2 * curposition * zFactor,
 		];
 		let zRight = [
-			1.6 * curposition * 0.5,
-			2 * curposition * 0.5,
-			2.4 * curposition * 0.5,
+			1.6 * curposition * zFactor,
+			2 * curposition * zFactor,
+			2.4 * curposition * zFactor,
 		];
 
-		let xLeftIncrement = [-10, -5, 0];
-		let xRightIncrement = [0, 5, 10];
+		let xLeftIncrement = [-30, -25, -20];
+		let xRightIncrement = [20, 25, 30];
 
 		scene3D.meshes.push(
 			addMesh(

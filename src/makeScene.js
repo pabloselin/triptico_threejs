@@ -39,12 +39,14 @@ function makeScene(elem, camProps, lightProps) {
 		const color = lightProps.color;
 		const intensity = lightProps.intensity;
 		const light = new THREE.AmbientLight(color, intensity);
-		light.position.set(
-			lightProps.position[0],
-			lightProps.position[1],
-			lightProps.position[2]
-		);
+		// light.position.set(
+		// 	lightProps.position[0],
+		// 	lightProps.position[1],
+		// 	lightProps.position[2]
+		// );
+		const hemisphereLight = new THREE.HemisphereLight(color, 0x93aaac, 1.1);
 		camera.add(light);
+		camera.add(hemisphereLight);
 	}
 
 	return { scene, camera, elem };

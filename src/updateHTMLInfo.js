@@ -1,6 +1,6 @@
 import { colors } from "./colors.js";
 
-function updateHTMLInfo(data, element, key, curcanvas) {
+function updateHTMLInfo(data, element, key, imagewrapper) {
 	const keycount = document.getElementById("keycount");
 	keycount.innerHTML = `[${key}/${data.length}]`;
 
@@ -18,7 +18,7 @@ function updateHTMLInfo(data, element, key, curcanvas) {
 
 		let fraction = parseInt(data.length / TRIPTICO.img.length);
 		let zone = parseInt(key / fraction);
-		curcanvas.style.backgroundImage = `url(${
+		imagewrapper.style.backgroundImage = `url(${
 			TRIPTICO_URLS.img + TRIPTICO.img[zone]
 		})`;
 	}
