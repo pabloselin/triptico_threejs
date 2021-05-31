@@ -32,4 +32,21 @@ function addMesh(geometry, material, x, y, z, rotX, scene) {
 	return plane;
 }
 
-export { addMesh, makeMesh };
+function addMeshHorizontal(geometry, material, x, y, z, rotX, scene) {
+	//const mesh = new THREE.Mesh(geometry, material);
+
+	const plane = new THREE.Mesh(geometry, material);
+
+	plane.position.x = x;
+	plane.position.y = y;
+	plane.position.z = z;
+	plane.rotation.x = rotX * 0.01; //rotX * 0.3;
+	plane.rotation.y = 0; //rotX * 0.5;
+	plane.rotation.z = 77;
+
+	scene.add(plane);
+
+	return plane;
+}
+
+export { addMesh, makeMesh, addMeshHorizontal };

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { makeMesh, addMesh } from "./geometries.js";
+import { makeMesh, addMesh, addMeshHorizontal } from "./geometries.js";
 import {
 	colors,
 	colors_morning,
@@ -539,11 +539,11 @@ function main(data) {
 		//Angulo
 
 		scene3D.meshes.push(
-			addMesh(
+			addMeshHorizontal(
 				scene3D.geometry,
 				scene3D.materialRight_1,
-				curpositiong + xRightIncrement[0],
-				drawCount * 0.9,
+				drawCount * 0.9 * -1,
+				curpositiong,
 				zRight[0],
 				curRotationc,
 				scene3D.scene
@@ -551,11 +551,11 @@ function main(data) {
 		);
 
 		scene3D.meshes.push(
-			addMesh(
+			addMeshHorizontal(
 				scene3D.geometry,
 				scene3D.materialRight_2,
-				curpositionh + xRightIncrement[1],
-				drawCount * 0.9,
+				drawCount * 0.9 * -1,
+				curpositionh,
 				zRight[1],
 				curRotationc,
 				scene3D.scene
@@ -563,11 +563,11 @@ function main(data) {
 		);
 
 		scene3D.meshes.push(
-			addMesh(
+			addMeshHorizontal(
 				scene3D.geometry,
 				scene3D.materialRight_3,
-				curpositioni + xRightIncrement[2],
-				drawCount * 0.9,
+				drawCount * 0.9 * -1,
+				curpositioni,
 				zRight[2],
 				curRotationc,
 				scene3D.scene
@@ -625,14 +625,14 @@ function main(data) {
 
 		//Angulo
 
-		if (scene3D.meshes.length > 300) {
-			//console.log(meshes[0], meshes.length);
-			for (let i = 0; i < 4; i++) {
-				scene3D.meshes[i].geometry.dispose();
-				scene3D.scene.remove(scene3D.meshes[i]);
-				scene3D.meshes.splice(i, 1);
-			}
-		}
+		// if (scene3D.meshes.length > 300) {
+		// 	//console.log(meshes[0], meshes.length);
+		// 	for (let i = 0; i < 4; i++) {
+		// 		scene3D.meshes[i].geometry.dispose();
+		// 		scene3D.scene.remove(scene3D.meshes[i]);
+		// 		scene3D.meshes.splice(i, 1);
+		// 	}
+		// }
 
 		rugScene.plane.rotation.x = curRotationc * 0.0125;
 		rugScene.plane.rotation.y = curRotationb * 0.0125;
@@ -640,8 +640,8 @@ function main(data) {
 		rugScene.geometry.attributes.color.array[drawCount] = 1;
 		rugScene.geometry.colorNeedUpdate = true;
 
-		scene3D.camera.position.y =
-			drawCount === 0 ? 0 : scene3D.camera.position.y + CAMERA_INCREMENT;
+		// scene3D.camera.position.y =
+		// 	drawCount === 0 ? 0 : scene3D.camera.position.y + CAMERA_INCREMENT;
 
 		scene3D.camera.rotation.y = curRotationd * 0.0005;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;
