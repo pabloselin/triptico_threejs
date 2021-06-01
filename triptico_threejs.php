@@ -21,7 +21,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/inc/triptico_custom_fields.php' );
 
 function triptico_scripts() {
 	wp_enqueue_script( 'tripticojs', plugin_dir_url( __FILE__ ) . '/dist/main.js', TRI_VERSION, true );
-	wp_enqueue_style( 'tripticocss', plugin_dir_url( __FILE__ ) . '/tristyle.css', array(), TRI_VERSION, 'screen' );
+	//wp_enqueue_style( 'tripticocss', plugin_dir_url( __FILE__ ) . '/tristyle.css', array(), TRI_VERSION, 'screen' );
 }
 
 add_action('wp_enqueue_scripts', 'triptico_scripts');
