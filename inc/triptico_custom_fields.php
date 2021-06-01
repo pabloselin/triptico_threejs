@@ -49,6 +49,10 @@ function triptico_cmb2_add_metabox_perfdata() {
 							'data-datepicker' => json_encode( array(
 									'dateFormat' => 'dd-mm-yy'
 									)
+								),
+							'data-timepicker' => json_encode( array(
+									'stepMinute' => 1
+									)
 								)
 							)
 	) );
