@@ -171,8 +171,8 @@ function main(data) {
 		return sceneInfo;
 	}
 
-	function setup3dScene() {
-		const canvasEl = document.querySelector("#triptico_canvas_3d");
+	function setup3dScene(canvasID) {
+		const canvasEl = document.querySelector(canvasID);
 		const camProps = {
 			fov: 55,
 			aspect: 2,
@@ -288,7 +288,8 @@ function main(data) {
 		drawCount,
 		colors.line_3
 	);
-	const scene3D = setup3dScene();
+	const scene3D = setup3dScene("#triptico_canvas_3d");
+	const scene3D_2 = setup3dScene("#triptico_canvas_3d_overlay");
 	const rugScene = setupRugScene();
 
 	//console.log(sceneLineLeft, scene3D);
@@ -538,39 +539,39 @@ function main(data) {
 
 		//Angulo
 
-		scene3D.meshes.push(
-			addMeshHorizontal(
-				scene3D.geometry,
-				scene3D.materialRight_1,
-				drawCount * 0.9 * -1,
-				curpositiong,
+		scene3D_2.meshes.push(
+			addMesh(
+				scene3D_2.geometry,
+				scene3D_2.materialRight_1,
 				zRight[0],
+				drawCount * 0.9,
+				curpositiong + xRightIncrement[0],
 				curRotationc,
-				scene3D.scene
+				scene3D_2.scene
 			)
 		);
 
-		scene3D.meshes.push(
-			addMeshHorizontal(
-				scene3D.geometry,
-				scene3D.materialRight_2,
-				drawCount * 0.9 * -1,
-				curpositionh,
+		scene3D_2.meshes.push(
+			addMesh(
+				scene3D_2.geometry,
+				scene3D_2.materialRight_2,
+				curpositionh + xRightIncrement[1],
+				drawCount * 0.9,
 				zRight[1],
 				curRotationc,
-				scene3D.scene
+				scene3D_2.scene
 			)
 		);
 
-		scene3D.meshes.push(
-			addMeshHorizontal(
-				scene3D.geometry,
-				scene3D.materialRight_3,
-				drawCount * 0.9 * -1,
-				curpositioni,
+		scene3D_2.meshes.push(
+			addMesh(
+				scene3D_2.geometry,
+				scene3D_2.materialRight_3,
+				curpositioni + xRightIncrement[2],
+				drawCount * 0.9,
 				zRight[2],
 				curRotationc,
-				scene3D.scene
+				scene3D_2.scene
 			)
 		);
 
@@ -587,39 +588,39 @@ function main(data) {
 			? data["acc2_d"][drawCount].g[2] * 4.2
 			: 0;
 
-		scene3D.meshes.push(
+		scene3D_2.meshes.push(
 			addMesh(
-				scene3D.geometryAcc,
-				scene3D.materialRight_4,
+				scene3D_2.geometryAcc,
+				scene3D_2.materialRight_4,
 				curpositionj + xRightIncrement[0],
 				drawCount * 0.9,
 				0.8,
 				curRotation,
-				scene3D.scene
+				scene3D_2.scene
 			)
 		);
 
-		scene3D.meshes.push(
+		scene3D_2.meshes.push(
 			addMesh(
-				scene3D.geometryAcc,
-				scene3D.materialRight_5,
+				scene3D_2.geometryAcc,
+				scene3D_2.materialRight_5,
 				curpositionk + xRightIncrement[1],
 				drawCount * 0.9,
 				1.2,
 				curRotation,
-				scene3D.scene
+				scene3D_2.scene
 			)
 		);
 
-		scene3D.meshes.push(
+		scene3D_2.meshes.push(
 			addMesh(
-				scene3D.geometryAcc,
-				scene3D.materialRight_6,
+				scene3D_2.geometryAcc,
+				scene3D_2.materialRight_6,
 				curpositionk + xRightIncrement[2],
 				drawCount * 0.9,
 				1.8,
 				curRotation,
-				scene3D.scene
+				scene3D_2.scene
 			)
 		);
 
@@ -646,6 +647,12 @@ function main(data) {
 		scene3D.camera.rotation.y = curRotationd * 0.0005;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;
 
+		scene3D_2.camera.position.y =
+			drawCount === 0 ? 0 : scene3D.camera.position.y + CAMERA_INCREMENT;
+
+		scene3D_2.camera.rotation.y = curRotationd * 0.0005;
+		// 	scene3D.camera.rotation.y + directionX * 0.01;
+
 		//console.log(drawCount);
 		//console.log(scene3D);
 		if (data["acc2_d"]) {
@@ -661,12 +668,13 @@ function main(data) {
 		renderSceneInfo(sceneLineLeft);
 		renderSceneInfo(sceneLineRight);
 		renderSceneInfo(scene3D);
+		renderSceneInfo(scene3D_2);
 		//renderSceneInfo(rugScene);
 
 		window.addEventListener("resize", renderer);
 	}
 
-	renderer.setClearColor(colors_morning.yellow, 1);
+	renderer.setClearColor(colors_morning.yellow, 0);
 	requestAnimationFrame(animate);
 }
 
