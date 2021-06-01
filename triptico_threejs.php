@@ -185,4 +185,17 @@ function triptico_datavars() {
 	}
 }
 
+function triptico_getperfimgs($postid) {
+	$datestart = get_post_meta($postid, '_tri_start_perfo', true);
+	$dateobj = new DateTime("@$datestart");
+
+	$perfduration = get_post_meta($postid, '_tri_length_perfo', true) ? get_post_meta($postid, '_tri_length_perfo', true) : 5;
+		date_add($dateobj, date_interval_create_from_date_string( $perfduration . ' minutes'));
+	$dateend = date_format($dateobj, 'U');
+
+	$imgs = searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.jpg', '');
+
+	return $imgs;
+}
+
 add_action('wp_enqueue_scripts', 'triptico_datavars');
