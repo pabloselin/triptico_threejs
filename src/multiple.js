@@ -95,8 +95,6 @@ function main(data) {
 		//const axesHelper = new THREE.AxesHelper(5);
 		let planePoints = parseInt(Math.sqrt(MAX_POINTS));
 
-		sceneInfo.scene.background = new THREE.Color(colors_morning.purple);
-
 		const indices = [];
 		const vertices = [];
 		const normals = [];
@@ -183,7 +181,7 @@ function main(data) {
 		};
 		const lightProps = {
 			color: 0xef9c29,
-			intensity: 0.6,
+			intensity: 0.1,
 			position: [0, 1, -2],
 		};
 		const sceneInfo = makeScene(canvasEl, camProps, lightProps);
@@ -252,7 +250,7 @@ function main(data) {
 			color: colors.line_2,
 		});
 
-		sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
+		//sceneInfo.scene.background = null; //new THREE.Color(colors_night.darkgreen);
 
 		sceneInfo.geometry = new THREE.CylinderGeometry(0.4, 0.6, 6, 24);
 		sceneInfo.geometryAcc = new THREE.PlaneGeometry(0.6, 2, 1);
@@ -641,8 +639,8 @@ function main(data) {
 		rugScene.geometry.attributes.color.array[drawCount] = 1;
 		rugScene.geometry.colorNeedUpdate = true;
 
-		// scene3D.camera.position.y =
-		// 	drawCount === 0 ? 0 : scene3D.camera.position.y + CAMERA_INCREMENT;
+		scene3D.camera.position.y =
+			drawCount === 0 ? 0 : scene3D.camera.position.y + CAMERA_INCREMENT;
 
 		scene3D.camera.rotation.y = curRotationd * 0.0005;
 		// 	scene3D.camera.rotation.y + directionX * 0.01;
@@ -674,7 +672,7 @@ function main(data) {
 		window.addEventListener("resize", renderer);
 	}
 
-	renderer.setClearColor(colors_morning.yellow, 0);
+	renderer.setClearColor(0xffffff, 1);
 	requestAnimationFrame(animate);
 }
 
