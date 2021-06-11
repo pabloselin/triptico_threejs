@@ -101,7 +101,7 @@ function main(data) {
 		// const axisHelper = new THREE.AxesHelper(5);
 		// sceneInfo.scene.add(axisHelper);
 
-		sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
+		sceneInfo.scene.background = new THREE.Color(colors_night.black);
 
 		sceneInfo.geometryAcc = new THREE.PlaneGeometry(0.6, 2, 1);
 		sceneInfo.meshes = [];
@@ -142,12 +142,12 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "a",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.2, 0.14, 0.1],
+			hue: [0.3, 0.33, 0.1],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 0.2, y: 0.2, z: 1 },
 			yIncrement: 10,
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
-			geoProps: [0.4, 0.3, 6, 12],
+			geoProps: [0.4, 0.3, 16, 12],
 			direction: "horizontal",
 		};
 
@@ -156,15 +156,15 @@ function main(data) {
 		let secondHorizontalProps = {
 			sceneInfo: sceneInfo,
 			maxpoints: MAX_POINTS,
-			data: data["acc2_i"],
+			data: data["acc2_d"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.6, 0.9, 0.1],
+			hue: [0.3, 0.39, 0.1],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 2.5, y: 6.4, z: -1 },
 			yIncrement: 10,
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
-			geoProps: [0.3, 0.3, 3, 4],
+			geoProps: [0.3, 0.3, 12, 4],
 			direction: "horizontal",
 		};
 
@@ -175,15 +175,15 @@ function main(data) {
 		let verticalProps = {
 			sceneInfo: sceneInfo,
 			maxpoints: MAX_POINTS,
-			data: data["acc2_d"],
+			data: data["acc2_i"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.1, 0.2, 0.1],
+			hue: [0.6, 0.65, 0.1],
 			//positionsFactor: primer numero x multiplicador por data, z position z
-			positionsFactor: { x: 2.3, y: 2, z: -1 },
+			positionsFactor: { x: 6.3, y: 2, z: -1 },
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
 			yIncrement: 0,
-			geoProps: [0.1, 0.3, 3, 4],
+			geoProps: [0.4, 0.3, 10, 4],
 			direction: "vertical",
 		};
 
@@ -192,15 +192,15 @@ function main(data) {
 		let secondVerticalProps = {
 			sceneInfo: sceneInfo,
 			maxpoints: MAX_POINTS,
-			data: data["acc2_d"],
+			data: data["acc2_i"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.5, 1, 0.4],
+			hue: [0.7, 0.82, 0.4],
 			//positionsFactor: primer numero x multiplicador por data, z position z
-			positionsFactor: { x: 2.3, y: 1, z: 1 },
+			positionsFactor: { x: 14.3, y: 1, z: 1 },
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
 			yIncrement: 0,
-			geoProps: [0.6, 0.5, 5, 12],
+			geoProps: [0.6, 0.5, 15, 12],
 			direction: "vertical",
 		};
 

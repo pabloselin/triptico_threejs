@@ -27,6 +27,7 @@ const colors_night = {
 	navy: 0x33334d,
 	darkgreen: 0x001a00,
 	brown: 0x331f00,
+	black: 0x000000,
 };
 
 export { colors, colors_morning, colors_sunset, colors_night };

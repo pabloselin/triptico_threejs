@@ -76,9 +76,10 @@ function combinedDirectionalMesh(props) {
 		if (props.direction === "vertical") {
 			positionHelper.position.x =
 				props.data[i][props.dataZone][0] * props.positionsFactor.x;
-			positionHelper.position.y = i;
+			positionHelper.position.y = i + 12;
 			positionHelper.position.z = props.positionsFactor.z;
-			positionHelper.rotation.z = props.data[i][props.dataZone][1] * 0.1;
+			positionHelper.rotation.z =
+				props.data[i][props.dataZone][1] * 0.4 + 30;
 		} else {
 			positionHelper.position.x = i;
 			positionHelper.position.y =
