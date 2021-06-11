@@ -39,7 +39,7 @@ function setupLineScene(canvasEl, data, maxpoints, drawCount, color) {
 	//updatePositions(sceneInfo.line_1, data["acc2_d"]);
 	updatePositions(sceneInfo.line_1, data, maxpoints, "a");
 	sceneInfo.geometry = geometry;
-	sceneInfo.scene.background = new THREE.Color(colors_night.darkgreen);
+	sceneInfo.scene.background = new THREE.Color(colors_night.black);
 
 	// const geometry = new THREE.BoxGeometry(1, 1, 1);
 	// const material = new THREE.MeshPhongMaterial({ color: "red" });
