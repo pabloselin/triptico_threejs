@@ -18,7 +18,7 @@ function canvasSquares2D(key, data, dataSize, canvas, width, height) {
 		// outlined square X: 50, Y: 35, width/height 50
 		// filled square X: 125, Y: 35, width/height 50
 		ctx.beginPath();
-		ctx.fillStyle = `rgba(${255 - (data % 255) * 5}, 0, 0, 1)`;
+		ctx.fillStyle = `rgba(${255 - (data % 255) * 5}, 0, 0, 0)`;
 		ctx.fillRect(
 			checkCol(posx, colCount),
 			checkRow(posy, rowCount),
