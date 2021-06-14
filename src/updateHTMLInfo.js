@@ -3,6 +3,7 @@ import { colors } from "./colors.js";
 function updateHTMLInfo(data, element, key, imagewrapper) {
 	const keycount = document.getElementById("keycount");
 	keycount.innerHTML = `[${key}/${data.length}]`;
+	let prevsrc = imagewrapper.dataset.src;
 
 	if (data[key]) {
 		element.innerHTML = `<p class="accel" style="background-color: ${
@@ -18,9 +19,9 @@ function updateHTMLInfo(data, element, key, imagewrapper) {
 
 		let fraction = parseInt(data.length / TRIPTICO.img.length);
 		let zone = parseInt(key / fraction);
-		imagewrapper.style.backgroundImage = `url(${
-			TRIPTICO_URLS.img + TRIPTICO.img[zone]
-		})`;
+		let currentsrc = TRIPTICO_URLS.img + TRIPTICO.img[zone];
+		imagewrapper.dataset.src = currentsrc;
+		imagewrapper.style.backgroundImage = `url(${currentsrc})`;
 	}
 
 	if (key === 0) {

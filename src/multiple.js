@@ -348,6 +348,10 @@ function main(data) {
 		for (let m = 0; m < scene3D.meshes["horizontal"].length; m++) {
 			scene3D.meshes["horizontal"][m].position.x -= 0.2;
 			scene3D.meshes["vertical"][m].position.y -= 0.2;
+			scene3D.meshes["horizontal"][m].rotation.x +=
+				data["acc2_d"][drawCount].a[0] * 0.01;
+			scene3D.meshes["vertical"][m].rotation.y +=
+				data["acc2_i"][drawCount].a[0] * 0.01;
 		}
 
 		// if (drawCount % MAX_POINTS === 0) {

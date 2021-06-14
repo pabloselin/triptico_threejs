@@ -11,7 +11,7 @@ function canvasSquares2D(key, data, dataSize, canvas, width, height) {
 		if (key === 0) {
 			ctx.clearRect(0, 0, width, height);
 		}
-		let colCount = width / sw + 130;
+		let colCount = width / sw + 180;
 		let rowCount = height / sh;
 		let posx = key * sw;
 		let posy = key * sh;
