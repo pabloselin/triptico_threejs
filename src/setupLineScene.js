@@ -27,7 +27,9 @@ function setupLineScene(canvasEl, data, maxpoints, drawCount, color) {
 	//first range
 	geometry.setDrawRange(0, 1);
 
-	const material = new THREE.LineBasicMaterial({ color: color });
+	const material = new THREE.LineBasicMaterial({
+		color: color,
+	});
 
 	//const line_acc2_d = new THREE.Line(geometry, material);
 	const line_acc2_i = new THREE.Line(geometry, material);
