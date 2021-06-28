@@ -13,7 +13,7 @@
  * Domain Path:       /languages
  **/
 
-define( 'TRI_VERSION', '0.3.3' );
+define( 'TRI_VERSION', '0.3.4' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/inc/triptico_custom_content.php' );
 require_once( plugin_dir_path( __FILE__ ) . '/inc/triptico_custom_fields.php' );
