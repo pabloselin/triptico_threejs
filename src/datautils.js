@@ -25,6 +25,7 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 						) {
 							console.log("running main thread");
 							runMain(data);
+							loadingMessage.classList.toggle("hidden");
 							hasrun = true;
 						}
 					});
