@@ -51,11 +51,11 @@ function triptico_cmb2_add_metabox_perfdata() {
 									'dateFormat' => 'dd-mm-yy'
 									))
 							),
-		//'after_row'		=> 'tri_date_after_row'
+		'after_row'		=> 'tri_date_after_row'
 	) );
 
 	if(get_post_meta($postid, '_tri_start_perfo', true)) {
-	
+		
 		$cmb->add_field( array(
 			'name'	=> __('Archivos disponibles acelerometros (izq + der)', 'tri'),
 			'id'	=> $prefix . 'picked_sensor_files_left',
@@ -133,13 +133,17 @@ function triptico_cmb2_add_metabox_perfdata() {
 
 function tri_availableFilesInRange($postid, $type) {
 	$date_start = get_post_meta($postid, '_tri_start_perfo', true);
-	$perfduration = get_post_meta($postid, '_tri_length_perfo', true) ? get_post_meta($postid, '_tri_length_perfo', true) : 5;
-	$dateobj = new DateTime("@$date_start");
+	$date_start_obj = new DateTime("@$date_start");
+	//$perfduration = get_post_meta($postid, '_tri_length_perfo', true) ? get_post_meta($postid, '_tri_length_perfo', true) : 5;
+	$date_end_obj = new DateTime("@$date_start");
 
-	date_add($dateobj, date_interval_create_from_date_string( '1 day'));
+	$date_end_obj = date_add($date_end_obj, date_interval_create_from_date_string( '1 day'));
 		
-	$date_end = date_format($dateobj, 'U');
+	$date_end = date_format($date_end_obj, 'U');
+	$date_start = date_format($date_start_obj, 'U');
 	
+	//var_dump($date_end, $date_start);
+
 	if($type == 'sensors_left') {
 		$files 	= 	searchFilesInRangeFolder($date_start, $date_end, TRI_CSV2FOLDER, '.csv', '_i');	
 	} elseif($type == 'sensors_right') {
@@ -154,7 +158,7 @@ function tri_availableFilesInRange($postid, $type) {
 		foreach($files as $file) {
 			$epoch = intval(substr($file, 0, 10));
 			$date_file = new DateTime("@$epoch");
-			$files_options[$type] = $date_file->format('j F Y H:i');
+			$files_options[$file] = $date_file->format('j F Y H:i');
 		}
 
 		return $files_options;
@@ -169,54 +173,25 @@ function tri_availableFilesInRange($postid, $type) {
 function tri_date_after_row( $field_args, $field) {
 	
 		$date_start = get_post_meta($field->object_id, '_tri_start_perfo', true);
-		$perfduration = get_post_meta($field->object_id, '_tri_length_perfo', true) ? get_post_meta($field->object_id, '_tri_length_perfo', true) : 5;
+		if($date_start) {
 		$dateobj = new DateTime("@$date_start");
 
-		date_add($dateobj, date_interval_create_from_date_string( '1 day'));
-		
-		$date_end = date_format($dateobj, 'U');
-		
+		$date_start = get_post_meta($field->object_id, '_tri_start_perfo', true);
+		$date_start_obj = new DateTime("@$date_start");
+		//$perfduration = get_post_meta($postid, '_tri_length_perfo', true) ? get_post_meta($postid, '_tri_length_perfo', true) : 5;
+		$date_end_obj = new DateTime("@$date_start");
 
-		$files_left 	= 	searchFilesInRangeFolder($date_start, $date_end, TRI_CSV2FOLDER, '.csv', '_i');
-		$files_right 	= 	searchFilesInRangeFolder($date_start, $date_end, TRI_CSV2FOLDER, '.csv', '_d');
-		$audio 			= 	searchFilesInRangeFolder($date_start, $date_end, TRI_AUDIOFOLDER, '.wav', '');
-		$images 		= 	searchFilesInRangeFolder($date_start, $date_end, TRI_IMGFOLDER, '.jpg', '');
+		$date_end_obj = date_add($date_end_obj, date_interval_create_from_date_string( '23 hours + 59 minutes'));
+
+		$date_start_format = date_format($date_start_obj, 'U');
+		$date_end_format = date_format($date_end_obj, 'U');
 
 		?>
 
-		<p>Para este día hay disponibles:</p>
-		<?php //var_dump($dateobj);?>
-		<p>Rango de tiempo - <?php echo $field->object_id;?> - <strong><?php echo $date_start;?> - <?php echo $date_end;?></strong></p>
-		<ul>
-			<li>
-				<?php echo count($files_left);?> archivos CSV del sensor izquierdo
-				<ul>
-					<?php 
-						foreach($files_left as $file_left): 
-							$epoch = intval(substr($file_left, 0, 10));
-							$date_file = new DateTime("@$epoch");
-							?>
-
-							<li>
-								<?php echo $epoch;?>
-								<?php echo $date_file->format('j F Y H:i');?>
-							</li>
-
-						<?php endforeach;
-					?>
-				</ul>
-			</li>
-			<li>
-				<?php echo count($files_right);?> archivos CSV del sensor derecho
-			</li>
-			<li>
-				<?php echo count($audio);?> archivos de audio
-			</li>
-			<li>
-				<?php echo count($images);?> imágenes
-			</li>
-		</ul>
+		<p>Buscando archivos entre <?php echo date_format($date_start_obj, 'j F Y H:i');?> (<?php echo $date_start_format;?>) y <?php echo date_format($date_end_obj, 'j F Y H:i');?> (<?php echo $date_end_format;?>)</p>
 
 		<?php
+
+		}
 
 }

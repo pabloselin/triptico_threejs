@@ -8,21 +8,14 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 
 	sensors.map((sensor, sensorkey) => {
 		let tmpdata = [];
-		for (let i = 0; i < files[sensor].length; i++) {
-			//console.log(acc2_d[i]);
-			if (
-				sensor === "acc_i" ||
-				sensor === "acc_d" ||
-				sensor === "acc2_i" ||
-				sensor === "acc2_d"
-			) {
-				let sensorURL = sensor.startsWith("acc2_") ? "csv_2" : "csv";
-				data[sensor] = fetch(filesURLS[sensorURL] + files[sensor][i])
+		if (sensor != "img") {
+			for (let i = 0; i < files[sensor].length; i++) {
+				data[sensor] = fetch(filesURLS["csv_2"] + files["acc2_d"][0])
 					.then((response) => response.text())
 					.then((dataTXT) => tmpdata.push(CSVToArray(dataTXT)))
 					.then((key) => {
-						//console.log(acc2_d_tmpdata)
 						data[sensor] = joinData(tmpdata, files[sensor].length);
+						console.log(data);
 					})
 					.then(() => {
 						if (
@@ -30,14 +23,43 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 							data.acc2_d !== undefined &&
 							data.acc2_d.length > 0
 						) {
-							console.log(data);
+							console.log("running main thread");
 							runMain(data);
 							hasrun = true;
-							loadingMessage.classList.toggle("hidden");
 						}
 					});
 			}
 		}
+		// for (let i = 0; i < files[sensor].length; i++) {
+		// 	//console.log(acc2_d[i]);
+		// 	if (
+		// 		sensor === "acc_i" ||
+		// 		sensor === "acc_d" ||
+		// 		sensor === "acc2_i" ||
+		// 		sensor === "acc2_d"
+		// 	) {
+		// 		let sensorURL = sensor.startsWith("acc2_") ? "csv_2" : "csv";
+		// 		console.log(files, sensor);
+		// 		// data[sensor] = fetch(filesURLS[sensorURL] + files[sensor][i])
+		// 		// 	.then((response) => response.text())
+		// 		// 	.then((dataTXT) => tmpdata.push(CSVToArray(dataTXT)))
+		// 		// 	.then((key) => {
+		// 		// 		//console.log(acc2_d_tmpdata)
+		// 		// 		data[sensor] = joinData(tmpdata, files[sensor].length);
+		// 		// 	})
+		// 		// 	.then(() => {
+		// 		// 		if (
+		// 		// 			hasrun === false &&
+		// 		// 			data.acc2_d !== undefined &&
+		// 		// 			data.acc2_d.length > 0
+		// 		// 		) {
+		// 		// 			console.log(data);
+		// 		// 			runMain(data);
+		// 		// 			hasrun = true;
+		// 		// 		}
+		// 		// 	});
+		// 	}
+		// }
 	});
 
 	return data;
