@@ -4,10 +4,17 @@ import canvasSquares2D from "./canvasSquares2D.js";
 
 window.onload = function () {
 	console.log("init triptico");
+	let fieldData = {
+		acc2_d: TRIPTICO_PICKED_SENSORS_LEFT,
+		acc2_i: TRIPTICO_PICKED_SENSORS_RIGHT,
+		img: TRIPTICO_PICKED_IMAGES,
+	};
+
+	console.log(fieldData);
 	const fetchData = getJoinedCSV(
-		TRIPTICO,
+		fieldData,
 		TRIPTICO_URLS,
-		TRIPTICO_SENSORS,
+		["img", "acc2_i", "acc2_d"],
 		main
 	);
 };

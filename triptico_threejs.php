@@ -13,7 +13,7 @@
  * Domain Path:       /languages
  **/
 
-define( 'TRI_VERSION', '0.3.2' );
+define( 'TRI_VERSION', '0.3.3' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/inc/triptico_custom_content.php' );
 require_once( plugin_dir_path( __FILE__ ) . '/inc/triptico_custom_fields.php' );
@@ -105,6 +105,17 @@ function triptico_debugfiles() {
 	return filesList(TRI_IMGFOLDER);
 }
 
+function triptico_resizeimagesmultiple($images) {
+	$resized = [];
+	if($images) {
+		foreach($images as $image) {
+			$resized[] = triptico_resizeimages($image);
+		}
+	}
+
+	return $resized;
+}
+
 function triptico_resizeimages($image) {
 	$basename = basename($image, '.jpg');
 	$newname = $basename . '_resized.jpg';
@@ -127,7 +138,7 @@ function searchFilesInRangeFolder($datestart, $dateend, $folder, $extension, $su
 	$fileslist = filesList($folder);
 	$datestart = intval($datestart . '000');
 	$dateend = intval($dateend . '000');
-	
+	//var_dump(count($fileslist), $datestart, $dateend);
 	//Recorro toda la lista de archivos por directorio
 	foreach($fileslist as $file) {
 		//Dejo solo la base del nombre de archivo
@@ -181,21 +192,27 @@ function triptico_datavars() {
 	
 		wp_register_script( 'tripticodata', '', [], '', true);
 		wp_enqueue_script( 'tripticodata' );
-		wp_add_inline_script('tripticodata', 'const TRIPTICO = ' . json_encode( searchFilesInRange( $datestart, $dateend, $post->ID)) . '; const TRIPTICO_URLS = ' .json_encode( triptico_dataurls()) . '; const TRIPTICO_SENSORS = ' . json_encode( get_post_meta($post->ID, '_tri_sensores', true)) . '; const TRIPTICO_DEBUGFILES = ' . json_encode( triptico_debugfiles()) . ';');
+		wp_add_inline_script('tripticodata', 'const TRIPTICO = ' . json_encode( searchFilesInRange( $datestart, $dateend, $post->ID)) . '; const TRIPTICO_URLS = ' .json_encode( triptico_dataurls()) . '; const TRIPTICO_SENSORS = ' . json_encode( get_post_meta($post->ID, '_tri_sensores', true)) . '; const TRIPTICO_DEBUGFILES = ' . json_encode( triptico_debugfiles()) . '; const TRIPTICO_PICKED_SENSORS_LEFT = ' . json_encode( get_post_meta($post->ID, '_tri_picked_sensor_files_left', true)) . ';const TRIPTICO_PICKED_SENSORS_RIGHT = ' . json_encode( get_post_meta($post->ID, '_tri_picked_sensor_files_right', true)) . '; const TRIPTICO_PICKED_IMAGES = ' . json_encode(get_post_meta($post->ID, '_tri_picked_image_files', true)) . '; const TRIPTICO_PICKED_IMAGES_RESIZED = ' . json_encode(triptico_resizeimagesmultiple(get_post_meta($post->ID, '_tri_picked_image_files', true))) );
 	}
 }
 
 function triptico_getperfimgs($postid) {
-	$datestart = get_post_meta($postid, '_tri_start_perfo', true);
-	$dateobj = new DateTime("@$datestart");
+	// $datestart = get_post_meta($postid, '_tri_start_perfo', true);
+	// $dateobj = new DateTime("@$datestart");
 
-	$perfduration = get_post_meta($postid, '_tri_length_perfo', true) ? get_post_meta($postid, '_tri_length_perfo', true) : 5;
-		date_add($dateobj, date_interval_create_from_date_string( $perfduration . ' minutes'));
-	$dateend = date_format($dateobj, 'U');
+	// $perfduration = get_post_meta($postid, '_tri_length_perfo', true) ? get_post_meta($postid, '_tri_length_perfo', true) : 5;
+	// 	date_add($dateobj, date_interval_create_from_date_string( $perfduration . ' minutes'));
+	// $dateend = date_format($dateobj, 'U');
 
-	$imgs = searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.jpg', '');
+	$imgs = get_post_meta($postid, '_tri_picked_image_files', true);
 
-	return $imgs;
+	//$imgs = searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.jpg', '');
+
+	foreach($imgs as $img) {
+		$smallimgs[] = triptico_resizeimages($img);
+	}
+
+	return $smallimgs;
 }
 
 add_action('wp_enqueue_scripts', 'triptico_datavars');

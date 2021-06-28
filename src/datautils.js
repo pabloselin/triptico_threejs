@@ -3,6 +3,9 @@ import CSVToArray from "./csvtoarray.js";
 const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 	let data = {};
 	let hasrun = false;
+	const loadingMessage = document.getElementById("loading");
+	console.log(loadingMessage, "loadingmsg");
+
 	sensors.map((sensor, sensorkey) => {
 		let tmpdata = [];
 		for (let i = 0; i < files[sensor].length; i++) {
@@ -30,13 +33,14 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 							console.log(data);
 							runMain(data);
 							hasrun = true;
+							loadingMessage.classList.toggle("hidden");
 						}
 					});
 			}
 		}
 	});
 
-	//return data;
+	return data;
 };
 
 const startAnimationWithCSV = (csv) => {
@@ -49,12 +53,14 @@ const startAnimationWithMultipleCSV = (files, imgs) => {
 	let tmpdata = [];
 	let finalData = [];
 	console.log(TRIPTICO_URLS);
+
 	for (let i = 0; i < files.length; i++) {
 		finalData = fetch(TRIPTICO_URLS.csv + files[i])
 			.then((response) => response.text())
 			.then((dataTXT) => tmpdata.push(CSVToArray(dataTXT)))
 			.then((key) => {
 				finalData = joinData(tmpdata, files.length, imgs);
+
 				return finalData;
 			});
 	}

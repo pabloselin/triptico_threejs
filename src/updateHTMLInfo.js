@@ -17,15 +17,15 @@ function updateHTMLInfo(data, element, key, imagewrapper) {
 				<span class="z">${data[key].a[2].toFixed(2)}</span>
 				<i>${key}</i></p>`;
 
-		let fraction = parseInt(data.length / TRIPTICO.img.length);
+		let fraction = parseInt(data.length / TRIPTICO_PICKED_IMAGES.length);
 		let zone = parseInt(key / fraction);
-		let currentsrc = TRIPTICO_URLS.img + TRIPTICO.img[zone];
+		let currentsrc = TRIPTICO_URLS.img + TRIPTICO_PICKED_IMAGES[zone];
 		imagewrapper.dataset.src = currentsrc;
 		imagewrapper.style.backgroundImage = `url(${currentsrc})`;
 	}
 
 	if (key === 0) {
-		let otherimgs = document.querySelector("#bottomimgs img");
+		let otherimgs = document.querySelectorAll("#bottomimgs img");
 		console.log(otherimgs);
 		for (let i = 0; i < otherimgs.length; i++) {
 			otherimgs[i].classList.remove("active");

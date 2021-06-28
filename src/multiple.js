@@ -52,13 +52,13 @@ function main(data) {
 	document.onmousemove = handleMouseMove;
 
 	//put images
-	let imgkeys = TRIPTICO.img_resized.length;
+	let imgkeys = TRIPTICO_PICKED_IMAGES_RESIZED;
 	let imgEls = [];
-
-	for (let i = 0; i < imgkeys; i++) {
+	console.log(imgkeys);
+	for (let i = 0; i < imgkeys.length; i++) {
 		console.log("run once");
 		let img = document.createElement("img");
-		img.setAttribute("src", TRIPTICO.img_resized[i]);
+		img.setAttribute("src", imgkeys[i]);
 		img.dataset.index = i;
 		imgEls.push(img);
 		imagesBottom.appendChild(img);
