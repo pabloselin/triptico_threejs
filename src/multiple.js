@@ -22,6 +22,7 @@ import canvasSquares2D from "./canvasSquares2D.js";
 
 // Tres escenas
 function main(data) {
+	console.log(data);
 	const MAX_POINTS = data.acc2_i.length;
 	const CAMERA_INCREMENT = 0.7;
 
@@ -49,7 +50,7 @@ function main(data) {
 	let canvasWidth = canvascontainer.clientWidth;
 	let canvasHeight = canvascontainer.clientHeight;
 
-	document.onmousemove = handleMouseMove;
+	//document.onmousemove = handleMouseMove;
 
 	//put images
 	let imgkeys = TRIPTICO_PICKED_IMAGES_RESIZED;
@@ -64,20 +65,20 @@ function main(data) {
 		imagesBottom.appendChild(img);
 	}
 
-	function handleMouseMove(event) {
-		if (event.pageX < mouseX) {
-			directionX = -1;
-		} else if (event.pageX > mouseX) {
-			directionX = 1;
-		}
-		mouseX = event.pageX;
+	// function handleMouseMove(event) {
+	// 	if (event.pageX < mouseX) {
+	// 		directionX = -1;
+	// 	} else if (event.pageX > mouseX) {
+	// 		directionX = 1;
+	// 	}
+	// 	mouseX = event.pageX;
 
-		if (mouseY > event.clientY) {
-			mouseY = event.clientY;
-		} else {
-			mouseY = -event.clientY;
-		}
-	}
+	// 	if (mouseY > event.clientY) {
+	// 		mouseY = event.clientY;
+	// 	} else {
+	// 		mouseY = -event.clientY;
+	// 	}
+	// }
 
 	function setup3dScene(canvasID) {
 		const canvasEl = document.querySelector(canvasID);
@@ -142,7 +143,7 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "a",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.3, 0.33, 0.1],
+			hue: [0.3, 0.33, 1.5],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 0.2, y: 0.2, z: 1 },
 			yIncrement: 10,
@@ -159,7 +160,7 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.3, 0.39, 0.1],
+			hue: [0.3, 0.33, 1.5],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 2.5, y: 6.4, z: -1 },
 			yIncrement: 10,
@@ -178,7 +179,7 @@ function main(data) {
 			data: data["acc2_i"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.6, 0.65, 0.1],
+			hue: [0.6, 0.65, 1.2],
 			//positionsFactor: primer numero x multiplicador por data, z position z
 			positionsFactor: { x: 6.3, y: 2, z: -1 },
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
@@ -195,7 +196,7 @@ function main(data) {
 			data: data["acc2_i"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.7, 0.82, 0.4],
+			hue: [0.7, 0.82, 1.5],
 			//positionsFactor: primer numero x multiplicador por data, z position z
 			positionsFactor: { x: 14.3, y: 1, z: 1 },
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
@@ -230,15 +231,15 @@ function main(data) {
 		lineleft,
 		data["acc2_i"],
 		MAX_POINTS,
-		drawCount,
-		colors.line_1
+		colors.line_1,
+		'line_left',
 	);
 	const sceneLineRight = setupLineScene(
 		lineright,
 		data["acc2_d"],
 		MAX_POINTS,
-		drawCount,
-		colors.line_3
+		colors.line_3,
+		'line_right'
 	);
 	const scene3D = setup3dScene("#triptico_canvas_3d");
 
@@ -305,22 +306,22 @@ function main(data) {
 		// renderSceneInfo(scene3D);
 		// renderSceneInfo(rugScene);
 
-		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
-		sceneLineRight.line_1.geometry.setDrawRange(0, drawCount_right);
+		sceneLineLeft["line_left"].geometry.setDrawRange(0, drawCount);
+		sceneLineRight["line_right"].geometry.setDrawRange(0, drawCount_right);
 
-		sceneLineLeft.line_1.rotation.x = time * 0.14;
-		sceneLineRight.line_1.rotation.x = time * 0.14;
+		sceneLineLeft["line_left"].rotation.x = time * 0.14;
+		sceneLineRight["line_right"].rotation.x = time * 0.14;
 		//sceneLineLeft.camera.position.x += 1;
 		//sceneLineLeft.camera.position.y += 1;
 
-		updatePositions(sceneLineLeft.line_1, data["acc2_d"], MAX_POINTS, "a");
-		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
-		sceneLineLeft.line_1.geometry.attributes.position.needsUpdate = true;
+		updatePositions(sceneLineLeft["line_left"], data["acc2_i"], MAX_POINTS, "a");
+		sceneLineLeft["line_left"].geometry.setDrawRange(0, drawCount);
+		sceneLineLeft["line_left"].geometry.attributes.position.needsUpdate = true;
 		//sceneLineLeft.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
-		updatePositions(sceneLineRight.line_1, data["acc2_i"], MAX_POINTS, "a");
-		sceneLineLeft.line_1.geometry.setDrawRange(0, drawCount);
-		sceneLineRight.line_1.geometry.attributes.position.needsUpdate = true;
+		updatePositions(sceneLineRight["line_right"], data["acc2_d"], MAX_POINTS, "a");
+		sceneLineRight["line_right"].geometry.setDrawRange(0, drawCount);
+		sceneLineRight["line_right"].geometry.attributes.position.needsUpdate = true;
 		//sceneLineRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
 		updateHTMLInfo(

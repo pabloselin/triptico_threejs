@@ -3,7 +3,7 @@ import makeScene from "./makeScene.js";
 import { colors, colors_morning, colors_night } from "./colors.js";
 import updatePositions from "./updatePositions.js";
 
-function setupLineScene(canvasEl, data, maxpoints, drawCount, color) {
+function setupLineScene(canvasEl, handData, maxpoints, color, lineName) {
 	const canvasDimensions = canvasEl.getBoundingClientRect();
 	const camProps = {
 		fov: 45,
@@ -32,14 +32,14 @@ function setupLineScene(canvasEl, data, maxpoints, drawCount, color) {
 	});
 
 	//const line_acc2_d = new THREE.Line(geometry, material);
-	const line_acc2_i = new THREE.Line(geometry, material);
+	const linedata = new THREE.Line(geometry, material);
 	//sceneInfo.scene.add(line_acc2_d);
-	sceneInfo.scene.add(line_acc2_i);
+	sceneInfo.scene.add(linedata);
 	//sceneInfo.line_1 = line_acc2_d;
-	sceneInfo.line_1 = line_acc2_i;
+	sceneInfo[lineName] = linedata;
 
 	//updatePositions(sceneInfo.line_1, data["acc2_d"]);
-	updatePositions(sceneInfo.line_1, data, maxpoints, "a");
+	//updatePositions(sceneInfo[lineName], handData, maxpoints, "a");
 	sceneInfo.geometry = geometry;
 	sceneInfo.scene.background = new THREE.Color(colors_night.black);
 

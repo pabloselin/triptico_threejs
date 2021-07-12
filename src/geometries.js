@@ -92,16 +92,17 @@ function combinedDirectionalMesh(props) {
 		originHelper.updateWorldMatrix(true, false);
 		cylinder.applyMatrix4(originHelper.matrixWorld);
 
-		const hue = THREE.MathUtils.lerp(
-			props.hue[0],
-			props.hue[1],
-			props.data[i][props.dataZone][0] * props.hue[2]
-		);
-		const saturation = 1;
+		// const hue = THREE.MathUtils.lerp(
+		// 	props.hue[0],
+		// 	props.hue[1],
+		// 	props.data[i][props.dataZone][0] * props.hue[2]
+		// );
+		const hue = props.hue[0];
+		const saturation = props.hue[1] * props.hue[2];
 		const lightness = THREE.MathUtils.lerp(
 			0.4,
 			0.6,
-			props.data[i][props.dataZone][1]
+			props.data[i][props.dataZone][0]
 		);
 
 		colorVert.setHSL(hue, saturation, lightness);

@@ -10,7 +10,7 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 		let tmpdata = [];
 		if (sensor != "img") {
 			for (let i = 0; i < files[sensor].length; i++) {
-				data[sensor] = fetch(filesURLS["csv_2"] + files["acc2_d"][0])
+				data[sensor] = fetch(filesURLS["csv_2"] + files[sensor][0])
 					.then((response) => response.text())
 					.then((dataTXT) => tmpdata.push(CSVToArray(dataTXT)))
 					.then((key) => {

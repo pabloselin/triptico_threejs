@@ -2,7 +2,6 @@ function updatePositions(line, data, maxpoints, unit) {
 	const positions = line.geometry.attributes.position.array;
 	let x, y, z, index;
 	x = y = z = index = 0;
-	//console.log(data);
 	if (data !== undefined) {
 		for (let i = 0, l = maxpoints; i < l; i++) {
 			if (data[i] !== undefined) {
