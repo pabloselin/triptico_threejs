@@ -143,7 +143,7 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "a",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.3, 0.33, 1.5],
+			hue: [0.3, 0.31, 4.01],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 0.2, y: 0.2, z: 1 },
 			yIncrement: 10,
@@ -160,7 +160,7 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.3, 0.33, 1.5],
+			hue: [0.3, 0.31, 4.01],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 2.5, y: 6.4, z: -1 },
 			yIncrement: 10,
@@ -232,14 +232,14 @@ function main(data) {
 		data["acc2_i"],
 		MAX_POINTS,
 		colors.line_1,
-		'line_left',
+		"line_left"
 	);
 	const sceneLineRight = setupLineScene(
 		lineright,
 		data["acc2_d"],
 		MAX_POINTS,
 		colors.line_3,
-		'line_right'
+		"line_right"
 	);
 	const scene3D = setup3dScene("#triptico_canvas_3d");
 
@@ -314,14 +314,28 @@ function main(data) {
 		//sceneLineLeft.camera.position.x += 1;
 		//sceneLineLeft.camera.position.y += 1;
 
-		updatePositions(sceneLineLeft["line_left"], data["acc2_i"], MAX_POINTS, "a");
+		updatePositions(
+			sceneLineLeft["line_left"],
+			data["acc2_i"],
+			MAX_POINTS,
+			"a"
+		);
 		sceneLineLeft["line_left"].geometry.setDrawRange(0, drawCount);
-		sceneLineLeft["line_left"].geometry.attributes.position.needsUpdate = true;
+		sceneLineLeft[
+			"line_left"
+		].geometry.attributes.position.needsUpdate = true;
 		//sceneLineLeft.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
-		updatePositions(sceneLineRight["line_right"], data["acc2_d"], MAX_POINTS, "a");
+		updatePositions(
+			sceneLineRight["line_right"],
+			data["acc2_d"],
+			MAX_POINTS,
+			"a"
+		);
 		sceneLineRight["line_right"].geometry.setDrawRange(0, drawCount);
-		sceneLineRight["line_right"].geometry.attributes.position.needsUpdate = true;
+		sceneLineRight[
+			"line_right"
+		].geometry.attributes.position.needsUpdate = true;
 		//sceneLineRight.line_1.material.color.setHSL(Math.random(), 1, 0.5);
 
 		updateHTMLInfo(

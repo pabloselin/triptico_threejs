@@ -98,12 +98,11 @@ function combinedDirectionalMesh(props) {
 		// 	props.data[i][props.dataZone][0] * props.hue[2]
 		// );
 		const hue = props.hue[0];
-		const saturation = props.hue[1] * props.hue[2];
-		const lightness = THREE.MathUtils.lerp(
-			0.4,
-			0.6,
-			props.data[i][props.dataZone][0]
-		);
+		const saturation =
+			props.hue[2] * Math.abs(props.data[i][props.dataZone][0]) * 1.2;
+		const lightFactorAbs = Math.abs(props.data[i][props.dataZone][0]);
+		const lightFactor = lightFactorAbs > 2 ? 2 : lightFactorAbs;
+		const lightness = THREE.MathUtils.lerp(0.4, 0.6, lightFactor);
 
 		colorVert.setHSL(hue, saturation, lightness);
 		const rgb = colorVert.toArray().map((v) => v * 255);
