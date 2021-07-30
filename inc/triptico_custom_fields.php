@@ -151,7 +151,7 @@ function tri_availableFilesInRange($postid, $type) {
 	} elseif($type == 'imgs') {
 		$files 	= 	searchFilesInRangeFolder($date_start, $date_end, TRI_IMGFOLDER, '.jpg', '');	
 	} elseif($type == 'audio') {
-		$files 	= 	searchFilesInRangeFolder($date_start, $date_end, TRI_AUDIOFOLDER, '.wav', '');	
+		$files 	= 	searchFilesInRangeFolder($date_start, $date_end, TRI_AUDIOFOLDER, '.mp3', '');	
 	}
 
 	if($files) {

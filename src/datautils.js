@@ -1,4 +1,5 @@
 import CSVToArray from "./csvtoarray.js";
+import initSound from "./soundHowl.js";
 
 const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 	let data = {};
@@ -8,7 +9,7 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 
 	sensors.map((sensor, sensorkey) => {
 		let tmpdata = [];
-		if (sensor != "img") {
+		if (sensor != "img" && sensor != "audio") {
 			for (let i = 0; i < files[sensor].length; i++) {
 				data[sensor] = fetch(filesURLS["csv_2"] + files[sensor][0])
 					.then((response) => response.text())
@@ -25,6 +26,7 @@ const getJoinedCSV = (files, filesURLS, sensors, runMain) => {
 						) {
 							console.log("running main thread");
 							runMain(data);
+							//initSound(TRIPTICO_PICKED_AUDIOS);
 							loadingMessage.classList.toggle("hidden");
 							hasrun = true;
 						}

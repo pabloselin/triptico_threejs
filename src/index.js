@@ -8,9 +8,11 @@ window.onload = function () {
 		acc2_d: TRIPTICO_PICKED_SENSORS_LEFT,
 		acc2_i: TRIPTICO_PICKED_SENSORS_RIGHT,
 		img: TRIPTICO_PICKED_IMAGES,
+		audio: TRIPTICO_PICKED_AUDIOS,
 	};
 
-	console.log(fieldData);
+	//console.log(fieldData);
+
 	const fetchData = getJoinedCSV(
 		fieldData,
 		TRIPTICO_URLS,

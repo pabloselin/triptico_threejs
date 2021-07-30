@@ -52,6 +52,8 @@ function main(data) {
 
 	//document.onmousemove = handleMouseMove;
 
+	//Audio stuff
+
 	//put images
 	let imgkeys = TRIPTICO_PICKED_IMAGES_RESIZED;
 	let imgEls = [];
