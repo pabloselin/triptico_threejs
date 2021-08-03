@@ -19,10 +19,14 @@ import updatePositions from "./updatePositions.js";
 import updateHTMLInfo from "./updateHTMLInfo.js";
 import updateImages from "./updateImages.js";
 import canvasSquares2D from "./canvasSquares2D.js";
+import initSound from "./soundHowl.js";
 
 // Tres escenas
 function main(data) {
-	console.log(data);
+	console.log("init main function");
+
+	initSound(TRIPTICO_PICKED_AUDIOS);
+
 	const MAX_POINTS = data.acc2_i.length;
 	const CAMERA_INCREMENT = 0.7;
 
