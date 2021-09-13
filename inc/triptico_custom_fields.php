@@ -54,6 +54,12 @@ function triptico_cmb2_add_metabox_perfdata() {
 		'after_row'		=> 'tri_date_after_row'
 	) );
 
+	$cmb->add_field( array(
+		'name'	=> 'Frase asociada',
+		'id'	=> $prefix . 'frase_asociada',
+		'type'	=> 'text'
+	));
+
 	if(get_post_meta($postid, '_tri_start_perfo', true)) {
 		
 		$cmb->add_field( array(

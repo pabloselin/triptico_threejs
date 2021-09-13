@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { BufferGeometryUtils } from "../node_modules/three/examples/jsm/utils/BufferGeometryUtils.js";
 import { OrbitControls } from "../node_modules/three/examples/jsm/controls/OrbitControls.js";
+//import jscolor from "@eastdesire/jscolor";
 import {
 	makeMesh,
 	addMesh,
@@ -26,6 +27,19 @@ function main(data) {
 	console.log("init main function");
 
 	initSound(TRIPTICO_PICKED_AUDIOS);
+	let curLeftHue = 0.3;
+	let curRightHue = 0.6;
+	//Colorpickers
+	// const leftPicker = new jscolor("#leftColorPicker", {
+	// 	format: "rgb",
+	// 	onChange:
+	// 		"curLeftHue = this.channel('H') / 360;console.log(curLeftHue)",
+	// });
+	// const rightPicker = new jscolor("#rightColorPicker", {
+	// 	format: "rgb",
+	// 	onChange:
+	// 		"curRightHue = this.channel('H') / 360;console.log(curRightHue)",
+	// });
 
 	const MAX_POINTS = data.acc2_i.length;
 	const CAMERA_INCREMENT = 0.7;
@@ -149,7 +163,7 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "a",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.3, 0.31, 4.01],
+			hue: [curLeftHue, curLeftHue + 0.1, 4.01],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 0.2, y: 0.2, z: 1 },
 			yIncrement: 10,
@@ -166,7 +180,7 @@ function main(data) {
 			data: data["acc2_d"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.3, 0.31, 4.01],
+			hue: [curLeftHue, curLeftHue + 0.1, 4.01],
 			//positionsFactor: primer numero x multiplicador por data, z position z, y: dependiendo de si es vertical u horizontal se usan como multiplicadores o como posicionadores
 			positionsFactor: { x: 2.5, y: 6.4, z: -1 },
 			yIncrement: 10,
@@ -185,7 +199,7 @@ function main(data) {
 			data: data["acc2_i"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.6, 0.65, 1.2],
+			hue: [curRightHue, curRightHue + 0.2, 1.2],
 			//positionsFactor: primer numero x multiplicador por data, z position z
 			positionsFactor: { x: 6.3, y: 2, z: -1 },
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
@@ -202,7 +216,7 @@ function main(data) {
 			data: data["acc2_i"],
 			dataZone: "g",
 			//hue: Primeros dos numeros rango y tercer numero multiplicador por data
-			hue: [0.7, 0.82, 1.5],
+			hue: [curRightHue, curRightHue + 0.2, 1.5],
 			//positionsFactor: primer numero x multiplicador por data, z position z
 			positionsFactor: { x: 14.3, y: 1, z: 1 },
 			//geoProps: propiedades geometria cilindro radius top, radius bottom, height, segments
@@ -263,14 +277,8 @@ function main(data) {
 
 	function renderSceneInfo(sceneInfo) {
 		const { scene, camera, elem } = sceneInfo;
-		const {
-			left,
-			right,
-			top,
-			bottom,
-			width,
-			height,
-		} = elem.getBoundingClientRect();
+		const { left, right, top, bottom, width, height } =
+			elem.getBoundingClientRect();
 
 		const isOffscreen =
 			bottom < 0 ||

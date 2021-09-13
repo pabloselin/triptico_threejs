@@ -4,6 +4,7 @@
   "description": "Implementacion ThreeJS para performances de MJ Rios",
   "private": true,
   "dependencies": {
+    "@eastdesire/jscolor": "^2.4.6",
     "howler": "^2.2.3",
     "nice-color-palettes": "^3.0.0",
     "three": "^0.127.0"

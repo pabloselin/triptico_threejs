@@ -207,9 +207,10 @@ function triptico_getperfimgs($postid) {
 	$imgs = get_post_meta($postid, '_tri_picked_image_files', true);
 
 	//$imgs = searchFilesInRangeFolder($datestart, $dateend, TRI_IMGFOLDER, '.jpg', '');
-
-	foreach($imgs as $img) {
-		$smallimgs[] = triptico_resizeimages($img);
+	if($imgs) {
+		foreach($imgs as $img) {
+			$smallimgs[] = triptico_resizeimages($img);
+		}
 	}
 
 	return $smallimgs;
