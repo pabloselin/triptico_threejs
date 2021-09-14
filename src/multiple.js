@@ -31,11 +31,11 @@ function main(data) {
 
 	hexToHSL(TRIPTICO_LEFT_COLOR).h / 360;
 	let curLeftHue =
-		TRIPTICO_LEFT_COLOR.length > 0
+		TRIPTICO_LEFT_COLOR.length > 2
 			? hexToHSL(TRIPTICO_LEFT_COLOR).h / 360
 			: 0.3;
 	let curRightHue =
-		TRIPTICO_RIGHT_COLOR.length > 0
+		TRIPTICO_RIGHT_COLOR.length > 2
 			? hexToHSL(TRIPTICO_RIGHT_COLOR).h / 360
 			: 0.6;
 	//Colorpickers
