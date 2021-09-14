@@ -28,27 +28,16 @@ function main(data) {
 	console.log("init main function");
 
 	initSound(TRIPTICO_PICKED_AUDIOS);
+	console.log(TRIPTICO_LEFT_COLOR.length > 0);
+	//hexToHSL(TRIPTICO_LEFT_COLOR).h / 360;
 
-	hexToHSL(TRIPTICO_LEFT_COLOR).h / 360;
-	let curLeftHue =
-		TRIPTICO_LEFT_COLOR.length > 2
-			? hexToHSL(TRIPTICO_LEFT_COLOR).h / 360
-			: 0.3;
-	let curRightHue =
-		TRIPTICO_RIGHT_COLOR.length > 2
-			? hexToHSL(TRIPTICO_RIGHT_COLOR).h / 360
-			: 0.6;
-	//Colorpickers
-	// const leftPicker = new jscolor("#leftColorPicker", {
-	// 	format: "rgb",
-	// 	onChange:
-	// 		"curLeftHue = this.channel('H') / 360;console.log(curLeftHue)",
-	// });
-	// const rightPicker = new jscolor("#rightColorPicker", {
-	// 	format: "rgb",
-	// 	onChange:
-	// 		"curRightHue = this.channel('H') / 360;console.log(curRightHue)",
-	// });
+	let curLeftHue = 0.3;
+	let curRightHue = 0.6;
+
+	if (TRIPTICO_LEFT_COLOR.length > 0) {
+		curLeftHue = hexToHSL(TRIPTICO_LEFT_COLOR).h / 360;
+		curRightHue = hexToHSL(TRIPTICO_RIGHT_COLOR).h / 360;
+	}
 
 	const MAX_POINTS = data.acc2_i.length;
 	const CAMERA_INCREMENT = 0.7;
