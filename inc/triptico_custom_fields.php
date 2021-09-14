@@ -190,7 +190,7 @@ function tri_availableFilesInRange($postid, $type) {
 			if($type === 'imgs') {
 				$files_options[$file] = '<img style="width:100px; height: auto; margin-top: 4px;display: inline-block;" src="' . TRI_IMGURL . $file . '" />';
 			} elseif($type == 'audio') {
-				$files_options[$file] = '<audio controls src="' . TRI_AUDIOURL . $file . '">' . $date_file->format('j F Y H:i') . '</audio>';
+				$files_options[$file] = $date_file->format('j F Y H:i') . '<p><audio controls src="' . TRI_AUDIOURL . $file . '">' . $date_file->format('j F Y H:i') . '</audio></p>';
 			}
 		}
 
