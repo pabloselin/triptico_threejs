@@ -245,18 +245,27 @@ function main(data) {
 
 	const lineleft = document.querySelector("#triptico_canvas_left");
 	const lineright = document.querySelector("#triptico_canvas_right");
+	let leftLineColor = colors.line_1;
+	let rightLineColor = colors.line_3;
+
+	if (TRIPTICO_LEFT_COLOR.length > 0) {
+		console.log("laksd");
+		leftLineColor = TRIPTICO_LEFT_COLOR;
+		rightLineColor = TRIPTICO_RIGHT_COLOR;
+	}
+
 	const sceneLineLeft = setupLineScene(
 		lineleft,
 		data["acc2_i"],
 		MAX_POINTS,
-		TRIPTICO_LEFT_COLOR,
+		leftLineColor,
 		"line_left"
 	);
 	const sceneLineRight = setupLineScene(
 		lineright,
 		data["acc2_d"],
 		MAX_POINTS,
-		TRIPTICO_RIGHT_COLOR,
+		rightLineColor,
 		"line_right"
 	);
 	const scene3D = setup3dScene("#triptico_canvas_3d");

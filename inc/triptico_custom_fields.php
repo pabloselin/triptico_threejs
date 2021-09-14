@@ -187,6 +187,11 @@ function tri_availableFilesInRange($postid, $type) {
 			$epoch = intval(substr($file, 0, 10));
 			$date_file = new DateTime("@$epoch");
 			$files_options[$file] = $date_file->format('j F Y H:i');
+			if($type === 'imgs') {
+				$files_options[$file] = '<img style="width:100px; height: auto; margin-top: 4px;display: inline-block;" src="' . TRI_IMGURL . $file . '" />';
+			} elseif($type == 'audio') {
+				$files_options[$file] = '<audio controls src="' . TRI_AUDIOURL . $file . '">' . $date_file->format('j F Y H:i') . '</audio>';
+			}
 		}
 
 		return $files_options;
