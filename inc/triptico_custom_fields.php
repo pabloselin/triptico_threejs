@@ -61,8 +61,9 @@ function triptico_cmb2_add_metabox_perfdata() {
 	));
 
 	$cmb->add_field( array(
-		'name'	=> 'Tono lado izquierdo',
-		'id'	=> $prefix . 'lefthue',
+		'name'			=> 'Tono lado izquierdo',
+		'id'			=> $prefix . 'lefthue',
+		'description'	=> 'Color por defecto izquierda: #0099cc',
 		'attributes' => array(
 			'data-colorpicker' => json_encode( array(
 				'mode' => 'hsl'
@@ -72,8 +73,9 @@ function triptico_cmb2_add_metabox_perfdata() {
 	));
 
 	$cmb->add_field( array(
-		'name'	=> 'Tono lado derecho',
-		'id'	=> $prefix . 'righthue',
+		'name'			=> 'Tono lado derecho',
+		'id'			=> $prefix . 'righthue',
+		'description'	=> 'Color por defecto derecha: #00b33c',
 		'attributes' => array(
 			'data-colorpicker' => json_encode( array(
 				'mode' => 'hsl'
