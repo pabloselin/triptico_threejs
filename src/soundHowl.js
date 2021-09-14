@@ -56,8 +56,8 @@ function initSound() {
 			}
 			soundToggle.innerHTML =
 				muted || firstPlay
-					? '<i class="lni lni-volume-high"></i>'
-					: '<i class="lni lni-volume-mute"></i>';
+					? '<i class="lni lni-volume-mute"></i>'
+					: '<i class="lni lni-volume-high"></i>';
 		});
 	}
 }

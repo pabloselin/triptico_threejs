@@ -3,7 +3,7 @@ let curkey = 0;
 function updateImages(element, key, imgcount, total) {
 	let fraction = parseInt(total / imgcount);
 	let zone = parseInt(key / fraction);
-	element.innerHTML = zone;
+	//element.innerHTML = zone;
 	let otherimgs = document.querySelector("#bottomimgs img");
 	if (otherimgs) {
 		for (let i = 0; i < otherimgs.length; i++) {

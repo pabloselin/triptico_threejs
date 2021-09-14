@@ -60,6 +60,28 @@ function triptico_cmb2_add_metabox_perfdata() {
 		'type'	=> 'text'
 	));
 
+	$cmb->add_field( array(
+		'name'	=> 'Tono lado izquierdo',
+		'id'	=> $prefix . 'lefthue',
+		'attributes' => array(
+			'data-colorpicker' => json_encode( array(
+				'mode' => 'hsl'
+				))
+		),
+		'type'	=> 'colorpicker'
+	));
+
+	$cmb->add_field( array(
+		'name'	=> 'Tono lado derecho',
+		'id'	=> $prefix . 'righthue',
+		'attributes' => array(
+			'data-colorpicker' => json_encode( array(
+				'mode' => 'hsl'
+				))
+		),
+		'type'	=> 'colorpicker'
+	));
+
 	if(get_post_meta($postid, '_tri_start_perfo', true)) {
 		
 		$cmb->add_field( array(

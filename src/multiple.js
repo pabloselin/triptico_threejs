@@ -8,6 +8,7 @@ import {
 	addMeshHorizontal,
 	combinedDirectionalMesh,
 } from "./geometries.js";
+import { hexToHSL } from "./utils.js";
 import {
 	colors,
 	colors_morning,
@@ -27,8 +28,16 @@ function main(data) {
 	console.log("init main function");
 
 	initSound(TRIPTICO_PICKED_AUDIOS);
-	let curLeftHue = 0.3;
-	let curRightHue = 0.6;
+
+	hexToHSL(TRIPTICO_LEFT_COLOR).h / 360;
+	let curLeftHue =
+		TRIPTICO_LEFT_COLOR.length > 0
+			? hexToHSL(TRIPTICO_LEFT_COLOR).h / 360
+			: 0.3;
+	let curRightHue =
+		TRIPTICO_RIGHT_COLOR.length > 0
+			? hexToHSL(TRIPTICO_RIGHT_COLOR).h / 360
+			: 0.6;
 	//Colorpickers
 	// const leftPicker = new jscolor("#leftColorPicker", {
 	// 	format: "rgb",
@@ -251,14 +260,14 @@ function main(data) {
 		lineleft,
 		data["acc2_i"],
 		MAX_POINTS,
-		colors.line_1,
+		TRIPTICO_LEFT_COLOR,
 		"line_left"
 	);
 	const sceneLineRight = setupLineScene(
 		lineright,
 		data["acc2_d"],
 		MAX_POINTS,
-		colors.line_3,
+		TRIPTICO_RIGHT_COLOR,
 		"line_right"
 	);
 	const scene3D = setup3dScene("#triptico_canvas_3d");
