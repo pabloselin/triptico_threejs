@@ -6,13 +6,17 @@ function canvasSquares2D(key, data, dataSize, canvas, width, height) {
 	let fraction = parseInt(dataSize / imgs.length);
 	let zone = parseInt(key / fraction);
 	let curimg = imgs[zone];
+	const isMobile = window.matchMedia("(max-width: 768px)");
+
+	let colCountExp = isMobile.matches ? 280 : 180;
+	console.log(colCountExp);
 
 	function init(key, data) {
 		if (key === 0) {
 			ctx.clearRect(0, 0, width, height);
 		}
-		let colCount = width / sw + 180;
-		let rowCount = height / sh;
+		let colCount = width / sw + colCountExp;
+		let rowCount = height / sh + 80;
 		let posx = key * sw;
 		let posy = key * sh;
 		// outlined square X: 50, Y: 35, width/height 50

@@ -26,6 +26,7 @@ import initSound from "./soundHowl.js";
 // Tres escenas
 function main(data) {
 	console.log("init main function");
+	const isMobile = window.matchMedia("(max-width: 768px)");
 
 	initSound(TRIPTICO_PICKED_AUDIOS);
 	console.log(TRIPTICO_LEFT_COLOR.length > 0);
